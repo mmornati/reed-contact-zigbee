@@ -1,0 +1,131 @@
+# Home Assistant package: garage door (ZB-SW01 opener + DIY ESP32-C6 closed sensor)
+#
+# Install: copy to /config/packages/garage_door.yaml and make sure configuration.yaml has
+#   homeassistant:
+#     packages: !include_dir_named packages
+#
+# Entity IDs below assume these Zigbee2MQTT friendly names:
+#   garage_opener        -> switch.garage_opener                   (ZB-SW01)
+#   garage_door_sensor   -> binary_sensor.garage_door_sensor_contact (ESP32-C6)
+# binary_sensor ... "on" = door NOT fully closed, "off" = fully closed.
+# Replace notify.notify with your own notifier (e.g. notify.mobile_app_<phone>).
+
+input_number:
+  garage_door_open_alert_minutes:
+    name: Garage door open alert delay
+    min: 1
+    max: 120
+    step: 1
+    unit_of_measurement: min
+    initial: 10
+
+script:
+  garage_door_pulse:
+    alias: Garage door - pulse opener
+    icon: mdi:gesture-tap-button
+    mode: single
+    sequence:
+      # Works whether the ZB-SW01 is in inching (momentary) mode or not.
+      - action: switch.turn_on
+        target:
+          entity_id: switch.garage_opener
+      - delay:
+          milliseconds: 800
+      - action: switch.turn_off
+        target:
+          entity_id: switch.garage_opener
+
+  garage_door_open:
+    alias: Garage door - open
+    icon: mdi:garage-open
+    mode: single
+    sequence:
+      - condition: state
+        entity_id: binary_sensor.garage_door_sensor_contact
+        state: "off"
+      - action: script.garage_door_pulse
+
+  garage_door_close:
+    alias: Garage door - close and verify
+    icon: mdi:garage
+    mode: single
+    sequence:
+      - condition: state
+        entity_id: binary_sensor.garage_door_sensor_contact
+        state: "on"
+      - action: script.garage_door_pulse
+      - wait_template: "{{ is_state('binary_sensor.garage_door_sensor_contact', 'off') }}"
+        timeout: "00:01:30"
+        continue_on_timeout: true
+      - if:
+          - condition: template
+            value_template: "{{ not wait.completed }}"
+        then:
+          - action: notify.notify
+            data:
+              title: "Garage door"
+              message: "Close was requested but the door is still not fully closed after 90 s."
+
+template:
+  - cover:
+      - name: Garage door
+        unique_id: garage_door_cover
+        device_class: garage
+        state: >-
+          {{ 'open' if is_state('binary_sensor.garage_door_sensor_contact', 'on') else 'closed' }}
+        availability: >-
+          {{ has_value('binary_sensor.garage_door_sensor_contact')
+             and has_value('switch.garage_opener') }}
+        open_cover:
+          - action: script.garage_door_open
+        close_cover:
+          - action: script.garage_door_close
+
+automation:
+  - id: garage_door_left_open
+    alias: Garage door - left open
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.garage_door_sensor_contact
+        to: "on"
+        for:
+          minutes: "{{ states('input_number.garage_door_open_alert_minutes') | int(10) }}"
+    actions:
+      - action: notify.notify
+        data:
+          title: "Garage door"
+          message: >-
+            The garage door has not been fully closed for
+            {{ states('input_number.garage_door_open_alert_minutes') | int(10) }} minutes.
+
+  - id: garage_door_night_check
+    alias: Garage door - night check
+    mode: single
+    triggers:
+      - trigger: time
+        at: "22:00:00"
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.garage_door_sensor_contact
+        state: "on"
+    actions:
+      - action: notify.notify
+        data:
+          title: "Garage door"
+          message: "It's 22:00 and the garage door is not fully closed."
+
+  - id: garage_door_sensor_offline
+    alias: Garage door - sensor offline
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.garage_door_sensor_contact
+        to: "unavailable"
+        for:
+          minutes: 15
+    actions:
+      - action: notify.notify
+        data:
+          title: "Garage door"
+          message: "The garage door sensor has been offline for 15 minutes."

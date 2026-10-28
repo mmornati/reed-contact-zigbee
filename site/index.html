@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reed Contact Zigbee</title>
+  <meta name="description" content="A mains-powered Zigbee contact sensor that also strengthens your mesh. Seeed XIAO ESP32-C6 + a reed switch, ready for Zigbee2MQTT and Home Assistant. Flash it from your browser.">
+  <meta property="og:title" content="Reed Contact Zigbee: know it's closed">
+  <meta property="og:description" content="DIY Zigbee contact sensor and router on the XIAO ESP32-C6. Garage doors, gates, windows, mailboxes. Zigbee2MQTT + Home Assistant ready.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0e1a'/%3E%3Crect x='7' y='13' width='11' height='6' rx='2' fill='%2394a3b8'/%3E%3Crect x='20' y='12' width='5' height='8' rx='1.5' fill='%23ffb547'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module" integrity="sha384-f+fR3K1mnKB2tVps4hdEh+qJvLgH2bKw81Yn+eNE3+gE8YpqocjkxQON4k19I3e/" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --bg-2: #0f1526;
+      --surface: #141b2f;
+      --surface-2: #1a2340;
+      --line: #25304f;
+      --text: #e8ecf6;
+      --muted: #9aa6c2;
+      --faint: #8892b0;
+      --amber: #ffb547;
+      --amber-2: #ff8a3d;
+      --mint: #3ee6a8;
+      --rose: #ff6b81;
+      --radius: 18px;
+      --maxw: 1160px;
+      --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --display: "Space Grotesk", var(--font);
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 var(--font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: var(--amber); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: var(--mono); }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
+    @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+    /* ---------- Nav ---------- */
+    nav.top {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 78%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+    }
+    nav.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; font: 600 17px var(--display); color: var(--text); }
+    .brand:hover { text-decoration: none; }
+    .brand-mark { width: 28px; height: 28px; }
+    nav.top ul { display: none; list-style: none; gap: 28px; margin: 0; padding: 0; }
+    nav.top ul a { color: var(--muted); font-size: 14px; font-weight: 500; }
+    nav.top ul a:hover { color: var(--text); text-decoration: none; }
+    @media (min-width: 900px) { nav.top ul { display: flex; } }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 22px; border-radius: 12px;
+      font: 600 15px var(--font); cursor: pointer; border: 1px solid transparent;
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--amber), var(--amber-2));
+      color: #1b1204;
+      box-shadow: 0 8px 20px -10px rgba(0, 0, 0, .7);
+    }
+    .btn-primary:hover { box-shadow: 0 12px 26px -10px rgba(0, 0, 0, .8); }
+    .btn-ghost { background: var(--surface); color: var(--text); border-color: var(--line); }
+    .btn-ghost:hover { background: var(--surface-2); }
+    .btn-sm { padding: 8px 14px; font-size: 14px; border-radius: 10px; }
+
+    /* ---------- Hero ---------- */
+    header.hero { position: relative; padding: 72px 0 56px; }
+    header.hero::before {
+      content: ""; position: absolute; inset: -200px 0 auto 0; height: 760px; z-index: -1;
+      background:
+        radial-gradient(600px 380px at 78% 30%, rgba(255, 181, 71, .16), transparent 70%),
+        radial-gradient(520px 360px at 12% 10%, rgba(62, 230, 168, .10), transparent 70%);
+    }
+    header.hero::after {
+      content: ""; position: absolute; inset: 0; z-index: -1; opacity: .35;
+      background-image: radial-gradient(var(--line) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+    .hero-grid { display: grid; gap: 48px; align-items: center; }
+    @media (min-width: 980px) { .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 56px; } }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: var(--surface); border: 1px solid var(--line);
+      color: var(--muted); font-size: 13px; font-weight: 500;
+    }
+    .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); }
+    h1 {
+      font: 700 clamp(44px, 7vw, 76px)/1.02 var(--display);
+      letter-spacing: -0.035em; margin: 22px 0 18px;
+    }
+    h1 .grad { color: var(--amber); }
+    .lede { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 560px; margin: 0 0 32px; }
+    .lede strong { color: var(--text); font-weight: 600; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .chip {
+      font: 500 12.5px var(--mono); color: var(--muted);
+      padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-2);
+    }
+
+    /* Demo card */
+    .demo {
+      position: relative; border-radius: 24px; padding: 22px;
+      background: linear-gradient(180deg, var(--surface), var(--bg-2));
+      border: 1px solid var(--line);
+      box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .demo-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .demo-title { font: 600 14px var(--display); color: var(--muted); letter-spacing: .02em; }
+    .state-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      font: 600 13px var(--font); padding: 6px 12px; border-radius: 999px;
+      transition: background .3s, color .3s;
+    }
+    .state-pill .led { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .is-closed .state-pill { background: rgba(62, 230, 168, .12); color: var(--mint); }
+    .is-open .state-pill { background: rgba(255, 107, 129, .12); color: var(--rose); }
+    .scene { width: 100%; height: auto; display: block; border-radius: 14px; background: #0c1122; cursor: pointer; }
+    .scene .door { transition: transform 1.1s cubic-bezier(.7, 0, .25, 1); }
+    .is-open .scene .door { transform: translateY(-118px); }
+    .scene .field { transition: opacity .4s; }
+    .is-open .scene .field { opacity: 0; }
+    .scene .reed-blade { transition: transform .25s ease; transform-origin: 300px 270px; }
+    .is-open .scene .reed-blade { transform: rotate(-7deg); }
+    .scene .wave { opacity: 0; }
+    .scene.pulse .wave { animation: wave 1.2s ease-out; }
+    .scene.pulse .wave:nth-of-type(2) { animation-delay: .15s; }
+    .scene.pulse .wave:nth-of-type(3) { animation-delay: .3s; }
+    @keyframes wave { 0% { opacity: .9; transform: scale(.4); } 100% { opacity: 0; transform: scale(1.6); } }
+    .scene .wave { transform-box: fill-box; transform-origin: center; }
+    .payload {
+      margin-top: 14px; padding: 14px 16px; border-radius: 12px;
+      background: #070a14; border: 1px solid var(--line);
+      font: 13px/1.6 var(--mono); color: var(--muted); overflow-x: auto;
+    }
+    .payload .k { color: #8ab4ff; } .payload .b { color: var(--mint); } .is-open .payload .b { color: var(--rose); }
+    .payload .c { color: var(--faint); }
+    .demo-hint { margin-top: 10px; font-size: 12.5px; color: var(--faint); text-align: center; }
+
+    /* ---------- Sections ---------- */
+    section { padding: 88px 0; }
+    section.alt { background: linear-gradient(180deg, var(--bg-2), var(--bg)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .kicker { font: 600 13px var(--mono); color: var(--amber); letter-spacing: .08em; text-transform: uppercase; }
+    h2 { font: 700 clamp(30px, 4.2vw, 46px)/1.1 var(--display); letter-spacing: -0.03em; margin: 12px 0 16px; }
+    .sub { color: var(--muted); font-size: 18px; max-width: 680px; margin: 0 0 48px; }
+    h3 { font: 600 19px/1.3 var(--display); margin: 0 0 8px; letter-spacing: -0.01em; }
+
+    .features { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .features { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1000px) { .features { grid-template-columns: repeat(4, 1fr); } }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 24px; transition: border-color .2s, transform .2s;
+    }
+    .card:hover { border-color: color-mix(in srgb, var(--amber) 45%, var(--line)); transform: translateY(-2px); }
+    .card p { color: var(--muted); margin: 0; font-size: 15px; }
+    .icon {
+      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px;
+      background: rgba(255, 181, 71, .1); color: var(--amber); border: 1px solid rgba(255, 181, 71, .25);
+    }
+    .icon svg { width: 22px; height: 22px; }
+
+    .uses { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 760px) { .uses { grid-template-columns: repeat(4, 1fr); } }
+    .use {
+      position: relative; border-radius: var(--radius); padding: 22px 20px;
+      background: var(--surface); border: 1px solid var(--line); overflow: hidden;
+    }
+    .use .emoji { font-size: 30px; line-height: 1; margin-bottom: 14px; display: block; }
+    .use p { color: var(--muted); font-size: 14px; margin: 0; }
+    .use.featured { grid-column: span 2; background: linear-gradient(135deg, rgba(255,181,71,.14), rgba(255,138,61,.04)), var(--surface); border-color: rgba(255,181,71,.35); }
+    .use .tag { position: absolute; top: 16px; right: 16px; font: 600 11px var(--mono); color: #1b1204; background: var(--amber); padding: 3px 8px; border-radius: 6px; }
+
+    /* Flow */
+    .flow { display: grid; gap: 12px; grid-template-columns: 1fr; counter-reset: step; }
+    @media (min-width: 900px) { .flow { grid-template-columns: repeat(5, 1fr); gap: 0; } }
+    .node {
+      position: relative; padding: 22px 18px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--line); text-align: center;
+    }
+    @media (min-width: 900px) {
+      .node { margin: 0 10px; }
+      .node:not(:last-child)::after {
+        content: ""; position: absolute; top: 50%; right: -21px; width: 22px; height: 2px;
+        background: linear-gradient(90deg, var(--amber), transparent);
+      }
+    }
+    .node .big { font-size: 26px; display: block; margin-bottom: 8px; }
+    .node strong { display: block; font: 600 15px var(--display); }
+    .node span.s { color: var(--faint); font-size: 13px; }
+
+    /* Flash */
+    .flash-grid { display: grid; gap: 28px; }
+    @media (min-width: 980px) { .flash-grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+    .flash-card {
+      border-radius: 24px; padding: 32px;
+      background: radial-gradient(400px 220px at 80% 0%, rgba(255,181,71,.18), transparent 70%), var(--surface);
+      border: 1px solid rgba(255,181,71,.3);
+    }
+    .flash-card h3 { font-size: 24px; }
+    .flash-card p { color: var(--muted); }
+    .version { font: 500 13px var(--mono); color: var(--faint); margin-top: 16px; }
+    esp-web-install-button { display: inline-block; margin-top: 8px; }
+    .unsupported { color: var(--rose); font-size: 14px; }
+    ol.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 14px; }
+    ol.steps li {
+      counter-increment: s; position: relative; padding: 18px 18px 18px 64px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px; color: var(--muted);
+    }
+    ol.steps li strong { color: var(--text); display: block; font-weight: 600; margin-bottom: 2px; }
+    ol.steps li::before {
+      content: counter(s); position: absolute; left: 18px; top: 18px;
+      width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+      font: 600 14px var(--mono); color: var(--amber); background: rgba(255,181,71,.1); border: 1px solid rgba(255,181,71,.3);
+    }
+    ol.steps code { font-size: 13px; color: var(--text); background: var(--bg-2); padding: 1px 6px; border-radius: 5px; }
+
+    /* Code */
+    .code {
+      position: relative; border-radius: 16px; background: #070a14; border: 1px solid var(--line); overflow: hidden;
+    }
+    .code-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+    .code-bar span { font: 500 12.5px var(--mono); color: var(--faint); }
+    .copy { font: 500 12px var(--mono); color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 4px 10px; cursor: pointer; }
+    .copy:hover { color: var(--text); }
+    .code pre { margin: 0; padding: 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.65; color: #cdd6f4; }
+    .tk-k { color: #cba6f7; } .tk-s { color: #a6e3a1; } .tk-c { color: #6c7086; font-style: italic; } .tk-p { color: #89b4fa; }
+
+    /* Garage */
+    .garage { display: grid; gap: 28px; }
+    @media (min-width: 980px) { .garage { grid-template-columns: 1fr 1fr; align-items: center; } }
+    .checks { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .checks li { display: flex; gap: 14px; padding: 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+    .checks li .ic { flex: none; font-size: 20px; line-height: 1.3; }
+    .checks li strong { display: block; }
+    .checks li span { color: var(--muted); font-size: 14.5px; }
+    .notif {
+      max-width: 380px; margin: 0 auto; padding: 16px 18px; border-radius: 20px;
+      background: rgba(30, 38, 64, .85); border: 1px solid var(--line); backdrop-filter: blur(10px);
+      box-shadow: 0 30px 60px -30px rgba(0,0,0,.9);
+    }
+    .notif + .notif { margin-top: 12px; opacity: .75; transform: scale(.96); }
+    .notif-head { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--faint); margin-bottom: 6px; }
+    .notif-head b { color: var(--muted); font-weight: 600; }
+    .notif strong { display: block; font-size: 15px; }
+    .notif p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+
+    /* BOM */
+    .bom { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .bom th, .bom td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); font-size: 15px; }
+    .bom th { font: 600 12.5px var(--mono); color: var(--faint); text-transform: uppercase; letter-spacing: .06em; background: var(--bg-2); }
+    .bom td { color: var(--muted); }
+    .bom td:first-child { color: var(--text); font-weight: 500; }
+    .bom tr:last-child td { border-bottom: 0; }
+    .bom-wrap { overflow-x: auto; }
+
+    /* FAQ */
+    .faq { display: grid; gap: 12px; max-width: 860px; }
+    details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 0 20px; }
+    details[open] { border-color: color-mix(in srgb, var(--amber) 35%, var(--line)); }
+    summary { cursor: pointer; list-style: none; padding: 18px 0; font: 600 17px var(--display); display: flex; justify-content: space-between; gap: 16px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--amber); font: 500 22px var(--mono); line-height: 1; }
+    details[open] summary::after { content: "–"; }
+    details p, details ul { color: var(--muted); margin: 0 0 18px; }
+    details ul { padding-left: 20px; }
+
+    /* Docs + footer */
+    .docs { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .docs { grid-template-columns: repeat(3, 1fr); } }
+    .doc { display: block; padding: 20px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--text); }
+    .doc:hover { text-decoration: none; border-color: color-mix(in srgb, var(--amber) 45%, var(--line)); }
+    .doc .n { font: 600 12px var(--mono); color: var(--amber); }
+    .doc strong { display: block; font: 600 16px var(--display); margin: 4px 0; }
+    .doc span { color: var(--muted); font-size: 14px; }
+    .final { text-align: center; padding: 100px 0; }
+    .final h2 { margin-bottom: 14px; }
+    .final .cta { justify-content: center; }
+    footer { border-top: 1px solid var(--line); padding: 32px 0; color: var(--faint); font-size: 14px; }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#141b2f" stroke="#25304f"/><rect x="6" y="13" width="12" height="6" rx="2" fill="#9aa6c2"/><rect x="20" y="11.5" width="6" height="9" rx="1.5" fill="#ffb547"/></svg>
+      Reed Contact Zigbee
+    </a>
+    <ul>
+      <li><a href="#why">Why</a></li>
+      <li><a href="#uses">Uses</a></li>
+      <li><a href="#flash">Flash</a></li>
+      <li><a href="#garage">Garage example</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="btn btn-ghost btn-sm" href="https://github.com/mmornati/reed-contact-zigbee">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Open source · Zigbee 3.0 · No cloud</span>
+      <h1>Know it's <span class="grad">closed.</span></h1>
+      <p class="lede">A mains-powered <strong>Zigbee contact sensor</strong> that also <strong>strengthens your mesh</strong>. A Seeed XIAO ESP32-C6 and a €1 reed switch, ready for <strong>Zigbee2MQTT</strong> and <strong>Home Assistant</strong>. Flash it from your browser in under a minute.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#flash">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Flash from your browser
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/mmornati/reed-contact-zigbee#readme">Read the build guide</a>
+      </div>
+      <div class="chips">
+        <span class="chip">ESP32-C6</span><span class="chip">IAS Zone contact</span><span class="chip">Zigbee router</span><span class="chip">Zigbee2MQTT</span><span class="chip">Home Assistant</span><span class="chip">MIT</span>
+      </div>
+    </div>
+
+    <div class="demo is-closed" id="demo">
+      <div class="demo-head">
+        <span class="demo-title">LIVE DEMO · garage door</span>
+        <span class="state-pill"><span class="led"></span><span id="state-text">Closed</span></span>
+      </div>
+      <svg class="scene" id="scene" viewBox="0 0 520 330" role="img" aria-label="A door with a magnet sliding away from a reed switch">
+        <defs>
+          <linearGradient id="slat" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a3558"/><stop offset="1" stop-color="#1e2744"/></linearGradient>
+          <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffb547" stop-opacity=".55"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/></radialGradient>
+        </defs>
+        <!-- frame -->
+        <rect x="40" y="18" width="300" height="300" rx="6" fill="#0a0f1f" stroke="#25304f" stroke-width="2"/>
+        <rect x="40" y="306" width="440" height="12" rx="3" fill="#1a2340"/>
+        <!-- door -->
+        <g class="door">
+          <rect x="50" y="28" width="280" height="270" rx="4" fill="url(#slat)" stroke="#33406a"/>
+          <g stroke="#33406a" stroke-width="2">
+            <line x1="50" y1="82" x2="330" y2="82"/><line x1="50" y1="136" x2="330" y2="136"/>
+            <line x1="50" y1="190" x2="330" y2="190"/><line x1="50" y1="244" x2="330" y2="244"/>
+          </g>
+          <rect x="170" y="258" width="40" height="8" rx="4" fill="#4a5784"/>
+          <!-- magnet on door -->
+          <rect x="304" y="250" width="22" height="34" rx="5" fill="#ffb547"/>
+          <rect x="304" y="250" width="22" height="11" rx="5" fill="#ff6b81"/>
+          <circle class="field" cx="318" cy="268" r="46" fill="url(#glow)"/>
+        </g>
+        <!-- reed on frame -->
+        <g>
+          <rect x="338" y="252" width="16" height="32" rx="4" fill="#9aa6c2"/>
+          <rect class="reed-blade" x="341" y="266" width="10" height="3" rx="1.5" fill="#0a0f1f"/>
+        </g>
+        <!-- cable -->
+        <path d="M354 270 C 390 270, 392 196, 420 196" fill="none" stroke="#3ee6a8" stroke-width="2.5" stroke-dasharray="5 5" opacity=".7"/>
+        <!-- XIAO -->
+        <g>
+          <rect x="414" y="150" width="68" height="84" rx="8" fill="#141b2f" stroke="#3ee6a8" stroke-width="1.5"/>
+          <rect x="430" y="168" width="36" height="30" rx="3" fill="#25304f"/>
+          <text x="448" y="220" fill="#9aa6c2" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">C6</text>
+          <line x1="448" y1="150" x2="448" y2="112" stroke="#9aa6c2" stroke-width="2"/>
+          <circle cx="448" cy="108" r="4" fill="#ffb547"/>
+          <circle class="wave" cx="448" cy="108" r="22" fill="none" stroke="#ffb547" stroke-width="2"/>
+          <circle class="wave" cx="448" cy="108" r="34" fill="none" stroke="#ffb547" stroke-width="1.5"/>
+          <circle class="wave" cx="448" cy="108" r="46" fill="none" stroke="#ffb547" stroke-width="1"/>
+        </g>
+      </svg>
+      <div class="payload" aria-live="polite"><span class="c">// zigbee2mqtt/garage_door_sensor</span><br>{ <span class="k">"contact"</span>: <span class="b" id="payload-val">true</span>, <span class="k">"linkquality"</span>: 236 }</div>
+      <div class="demo-hint">Tap the door to open or close it</div>
+    </div>
+  </div>
+</header>
+
+<section id="why">
+  <div class="wrap">
+    <span class="kicker">Why build it</span>
+    <h2>A contact sensor that pulls its weight.</h2>
+    <p class="sub">Battery sensors report and go back to sleep. This one stays awake, relays your other Zigbee devices, and tells you when something's wrong instead of failing silently.</p>
+    <div class="features">
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></div>
+        <h3>A Zigbee router, too</h3>
+        <p>Mains powered, so it routes traffic for every Zigbee device nearby. Your garage, shed or gate finally gets solid coverage.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Fail-safe by design</h3>
+        <p>Only a magnet in place reads <em>closed</em>. A cut wire, a loose connector or a dead sensor all show up as <em>open</em>, never as a false "all good".</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
+        <h3>Z2M &amp; HA native</h3>
+        <p>A standard IAS Zone contact. One tiny converter and it shows up as a door/window sensor in Home Assistant.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
+        <h3>No WiFi, no cloud</h3>
+        <p>No passwords, IPs or app accounts. It keeps working when your WiFi doesn't, and nothing leaves your house.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="uses" class="alt">
+  <div class="wrap">
+    <span class="kicker">Put it anywhere</span>
+    <h2>If a magnet can move, you can watch it.</h2>
+    <p class="sub">The reed goes on the fixed part, the magnet on the moving part. The same firmware works for all of these.</p>
+    <div class="uses">
+      <div class="use featured"><span class="tag">FULL GUIDE</span><span class="emoji" aria-hidden="true">🚗</span><h3>Garage door</h3><p>Detects "not <em>fully</em> closed", even a door that stopped 5 cm early. Pairs with a Zigbee relay for a real open/close cover.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🚧</span><h3>Gate</h3><p>Sliding or swing. Long cable runs are fine.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🚪</span><h3>Doors</h3><p>A recessed reed is invisible once fitted.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🪟</span><h3>Windows</h3><p>Skylights, tilt-and-turn, roof windows.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🛖</span><h3>Shed &amp; cellar</h3><p>Out of WiFi range, inside the mesh.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">📬</span><h3>Mailbox</h3><p>"You've got mail" on every flap.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🧊</span><h3>Freezer &amp; fridge</h3><p>"Left open for 5 minutes" alerts.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <span class="kicker">How it works</span>
+    <h2>From a magnet to an automation.</h2>
+    <p class="sub">The reed closes when the magnet is near. The ESP32-C6 debounces it, reports it as a Zigbee IAS Zone, and re-sends it every 5 minutes so Home Assistant never holds a stale state.</p>
+    <div class="flow">
+      <div class="node"><span class="big" aria-hidden="true">🧲</span><strong>Reed + magnet</strong><span class="s">NO contact to GND</span></div>
+      <div class="node"><span class="big" aria-hidden="true">🔌</span><strong>XIAO ESP32-C6</strong><span class="s">200 ms debounce · router</span></div>
+      <div class="node"><span class="big" aria-hidden="true">📡</span><strong>Zigbee mesh</strong><span class="s">IAS Zone contact</span></div>
+      <div class="node"><span class="big" aria-hidden="true">🔁</span><strong>Zigbee2MQTT</strong><span class="s"><code>contact: true</code></span></div>
+      <div class="node"><span class="big" aria-hidden="true">🏠</span><strong>Home Assistant</strong><span class="s">binary_sensor · door</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="flash" class="alt">
+  <div class="wrap">
+    <span class="kicker">Flash</span>
+    <h2>No toolchain. Just a USB cable.</h2>
+    <p class="sub">Plug the XIAO ESP32-C6 into your computer and flash the latest firmware straight from this page. Prefer to build it yourself? It's a single <code>pio run</code>.</p>
+    <div class="flash-grid">
+      <div class="flash-card">
+        <h3>Install the firmware</h3>
+        <p>Works in Chrome and Edge on desktop (Web Serial). On first install, choose <strong>Erase device</strong> so the Zigbee stack starts clean.</p>
+        <esp-web-install-button manifest="firmware/manifest.json">
+          <button slot="activate" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Connect &amp; install
+          </button>
+          <span slot="unsupported" class="unsupported">Your browser doesn't support Web Serial. Open this page in Chrome or Edge on a computer.</span>
+          <span slot="not-allowed" class="unsupported">Web Serial needs a secure (https) page.</span>
+        </esp-web-install-button>
+        <div class="version">firmware · __FIRMWARE_VERSION__ · XIAO ESP32-C6 · Zigbee router</div>
+      </div>
+      <ol class="steps">
+        <li><strong>Connect the board</strong>USB-C to your computer, with nothing else powering it.</li>
+        <li><strong>Flash it</strong>Click <em>Connect &amp; install</em>, pick the serial port, and accept the erase on the first install.</li>
+        <li><strong>Add the converter</strong>Drop <code>reed_contact.mjs</code> into Zigbee2MQTT's <code>external_converters/</code> folder and restart it.</li>
+        <li><strong>Pair</strong>Click <em>Permit join</em>. The LED blinks while it searches and goes dark once it joins. Hold BOOT for 3 s to reset.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="converter">
+  <div class="wrap">
+    <span class="kicker">Zigbee2MQTT</span>
+    <h2>Twelve lines and you're paired.</h2>
+    <p class="sub">The converter uses Zigbee2MQTT's own building blocks, and CI checks it against the same library Z2M runs. The model string is verified against the firmware source on every commit.</p>
+    <div class="code">
+      <div class="code-bar"><span>external_converters/reed_contact.mjs</span><button class="copy" data-copy="converter-src">Copy</button></div>
+<pre id="converter-src"><span class="tk-k">import</span> * <span class="tk-k">as</span> m <span class="tk-k">from</span> <span class="tk-s">'zigbee-herdsman-converters/lib/modernExtend'</span>;
+
+<span class="tk-k">export default</span> {
+    <span class="tk-p">zigbeeModel</span>: [<span class="tk-s">'C6ReedContact'</span>],
+    <span class="tk-p">model</span>: <span class="tk-s">'C6ReedContact'</span>,
+    <span class="tk-p">vendor</span>: <span class="tk-s">'DIY'</span>,
+    <span class="tk-p">description</span>: <span class="tk-s">'Mains-powered reed contact sensor and Zigbee router (XIAO ESP32-C6)'</span>,
+    <span class="tk-c">// contact: true = magnet in front of the reed (closed), false = open</span>
+    <span class="tk-p">extend</span>: [m.iasZoneAlarm({<span class="tk-p">zoneType</span>: <span class="tk-s">'contact'</span>, <span class="tk-p">zoneAttributes</span>: [<span class="tk-s">'alarm_1'</span>]})],
+};</pre>
+    </div>
+  </div>
+</section>
+
+<section id="garage" class="alt">
+  <div class="wrap garage">
+    <div>
+      <span class="kicker">Worked example</span>
+      <h2>The garage door that tells you it didn't close.</h2>
+      <p class="sub" style="margin-bottom:28px">The full guide pairs the sensor with a ZB-SW01 Zigbee relay on the motor's push-button input. A ready-made Home Assistant package turns the two into a proper <code>cover</code>.</p>
+      <ul class="checks">
+        <li><span class="ic" aria-hidden="true">🔒</span><div><strong>Close &amp; verify</strong><span>Asks the motor to close, then checks the door really shut within 90 s.</span></div></li>
+        <li><span class="ic" aria-hidden="true">⏱️</span><div><strong>Left-open alert</strong><span>Notifies you after N minutes. You choose N from the dashboard.</span></div></li>
+        <li><span class="ic" aria-hidden="true">🌙</span><div><strong>Night check</strong><span>A 22:00 reminder if the door isn't shut.</span></div></li>
+        <li><span class="ic" aria-hidden="true">📴</span><div><strong>Sensor offline</strong><span>Know when the sensor itself stops reporting.</span></div></li>
+      </ul>
+    </div>
+    <div>
+      <div class="notif"><div class="notif-head"><b>Home Assistant</b><span>now</span></div><strong>Garage door</strong><p>Close was requested but the door is still not fully closed after 90 s.</p></div>
+      <div class="notif"><div class="notif-head"><b>Home Assistant</b><span>22:00</span></div><strong>Garage door</strong><p>It's 22:00 and the garage door is not fully closed.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="bom">
+  <div class="wrap">
+    <span class="kicker">Bill of materials</span>
+    <h2>About €15 of parts.</h2>
+    <p class="sub">Plus the 12 V supply you probably already have near a motor or an access-control kit.</p>
+    <div class="bom-wrap">
+      <table class="bom">
+        <thead><tr><th>Part</th><th>Why</th><th>Approx.</th></tr></thead>
+        <tbody>
+          <tr><td>Seeed XIAO ESP32-C6</td><td>Zigbee radio + MCU, U.FL antenna connector</td><td>€6</td></tr>
+          <tr><td>2.4 GHz U.FL antenna</td><td>Range from inside a box</td><td>€2</td></tr>
+          <tr><td>Reed switch (NO/NC) + magnet</td><td>The sensor itself</td><td>€1–3</td></tr>
+          <tr><td>LM2596 buck converter</td><td>12–24 V → 5 V</td><td>€1–2</td></tr>
+          <tr><td>IP65/67 enclosure + glands</td><td>Garage, gate or garden ready</td><td>€5</td></tr>
+          <tr><td>10 kΩ + 100 nF</td><td>Clean signal on long cables</td><td>cents</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="alt">
+  <div class="wrap">
+    <span class="kicker">FAQ</span>
+    <h2>Good questions.</h2>
+    <div class="faq">
+      <details open>
+        <summary>Why Zigbee and not WiFi / ESPHome?</summary>
+        <p>For a single contact, Zigbee wins: it joins the mesh your other sensors already use, needs no credentials, survives WiFi outages and, being mains powered, adds a router where you usually need one. The trade-off is firmware updates over USB instead of over WiFi, and a small Z2M converter. For a device you install once, that's a good deal.</p>
+      </details>
+      <details>
+        <summary>Why the Arduino framework instead of ESP-IDF?</summary>
+        <p>Both run the same Espressif Zigbee stack. Arduino gets this sensor done in ~200 readable lines, which is easier for everyone to fork. ESP-IDF pays off for custom clusters, battery tuning down to the µA, or a commercial product.</p>
+      </details>
+      <details>
+        <summary>Can it run on a battery?</summary>
+        <p>It can, but then it should become a sleepy end device and stop routing. Commercial battery sensors are cheaper for that. This project is for places where power is close by and a router is welcome.</p>
+      </details>
+      <details>
+        <summary>How do I know it's working?</summary>
+        <ul>
+          <li>The LED blinks while searching for a network and turns off once joined.</li>
+          <li>Zigbee2MQTT shows it as a <strong>Router</strong> with <code>contact</code> flipping as you move the magnet.</li>
+          <li>The state is re-sent every 5 minutes, and Z2M availability flags it if it disappears.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Is it tested?</summary>
+        <p>Every commit runs host unit tests for the debounce and heartbeat logic (including <code>millis()</code> rollover), builds with both PlatformIO and Arduino CLI, tests the converter against <code>zigbee-herdsman-converters</code>, and validates the Home Assistant package with Home Assistant's own config checker.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="docs">
+  <div class="wrap">
+    <span class="kicker">Documentation</span>
+    <h2>Everything, step by step.</h2>
+    <p class="sub">Wiring diagrams, a bench-first build, flashing, pairing and the Home Assistant package.</p>
+    <div class="docs">
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/01-hardware-and-wiring.md"><span class="n">01</span><strong>Hardware &amp; wiring</strong><span>Power, reed choice, diagram</span></a>
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/02-build-guide.md"><span class="n">02</span><strong>Step-by-step build</strong><span>Bench test to final install</span></a>
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/03-firmware.md"><span class="n">03</span><strong>Firmware</strong><span>PlatformIO or Arduino IDE</span></a>
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/04-zigbee2mqtt-and-home-assistant.md"><span class="n">04</span><strong>Z2M &amp; Home Assistant</strong><span>Converter, cover, alerts</span></a>
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/05-troubleshooting.md"><span class="n">05</span><strong>Troubleshooting</strong><span>Symptoms and fixes</span></a>
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/releases"><span class="n">↓</span><strong>Releases</strong><span>Firmware binaries &amp; checksums</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>Stop wondering if you closed it.</h2>
+    <p class="sub" style="margin:0 auto 32px">Fifteen euros, an afternoon, and one less thing to worry about.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#flash">Flash the firmware</a>
+      <a class="btn btn-ghost" href="https://github.com/mmornati/reed-contact-zigbee">Star on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Reed Contact Zigbee · MIT License · by <a href="https://github.com/mmornati">@mmornati</a></span>
+    <span>Not affiliated with Seeed Studio, Espressif, Zigbee2MQTT or Home Assistant.</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var demo = document.getElementById('demo');
+    var scene = document.getElementById('scene');
+    var text = document.getElementById('state-text');
+    var val = document.getElementById('payload-val');
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var open = false;
+    var timer;
+
+    function render() {
+      demo.classList.toggle('is-open', open);
+      demo.classList.toggle('is-closed', !open);
+      text.textContent = open ? 'Open' : 'Closed';
+      // The reed only reports after the door has finished moving (debounce).
+      setTimeout(function () {
+        val.textContent = open ? 'false' : 'true';
+        scene.classList.remove('pulse');
+        void scene.getBoundingClientRect();
+        scene.classList.add('pulse');
+      }, reduced ? 0 : 450);
+    }
+
+    function toggle() { open = !open; render(); }
+
+    function schedule() {
+      clearInterval(timer);
+      if (!reduced) timer = setInterval(toggle, 3600);
+    }
+
+    scene.addEventListener('click', function () { toggle(); schedule(); });
+    schedule();
+
+    document.querySelectorAll('.copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var src = document.getElementById(btn.dataset.copy).innerText;
+        navigator.clipboard.writeText(src).then(function () {
+          btn.textContent = 'Copied';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
