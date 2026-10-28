@@ -1,5 +1,7 @@
 # 3. Firmware: build and flash
 
+🌐 **English** · [Français](fr/03-firmware.md) · [Italiano](it/03-firmware.md)
+
 Sketch: [`firmware/reed_contact/reed_contact.ino`](../firmware/reed_contact/reed_contact.ino)
 
 ## What it does

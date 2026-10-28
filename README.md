@@ -16,6 +16,8 @@ Seeed XIAO ESP32-C6 + a reed switch · Zigbee2MQTT & Home Assistant ready · fla
 
 [**🌐 Website**](https://mmornati.github.io/reed-contact-zigbee/) · [**⚡ Flash in your browser**](https://mmornati.github.io/reed-contact-zigbee/#flash) · [**📖 Build guide**](docs/01-hardware-and-wiring.md) · [**📦 Releases**](https://github.com/mmornati/reed-contact-zigbee/releases)
 
+🌐 **English** · [Français](README.fr.md) · [Italiano](README.it.md)
+
 <a href="https://mmornati.github.io/reed-contact-zigbee/"><img src="docs/assets/hero.png" alt="Reed Contact Zigbee website: a live demo of a garage door sending contact true to Zigbee2MQTT" width="900"></a>
 
 </div>

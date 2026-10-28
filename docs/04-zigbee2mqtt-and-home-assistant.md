@@ -1,5 +1,7 @@
 # 4. Zigbee2MQTT and Home Assistant
 
+🌐 **English** · [Français](fr/04-zigbee2mqtt-and-home-assistant.md) · [Italiano](it/04-zigbee2mqtt-and-home-assistant.md)
+
 ## 4.1 Install the external converter (Zigbee2MQTT 2.x)
 
 Z2M doesn't know a DIY device, so a tiny converter tells it "this is a contact sensor".

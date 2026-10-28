@@ -1,5 +1,7 @@
 # 2. Step-by-step build
 
+🌐 **English** · [Français](fr/02-build-guide.md) · [Italiano](it/02-build-guide.md)
+
 Do these steps in order. You test each part on the bench before it goes into the garage.
 
 ## Step 1: Flash and pair on the bench (USB only)

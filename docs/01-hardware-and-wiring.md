@@ -1,5 +1,7 @@
 # 1. Hardware and wiring
 
+🌐 **English** · [Français](fr/01-hardware-and-wiring.md) · [Italiano](it/01-hardware-and-wiring.md)
+
 > ⚠️ The YAVIS PSU is mains powered (90–260 V AC). Switch off the circuit breaker before touching its input terminals. Everything else in this project is low voltage (12 V / 5 V / 3.3 V).
 
 ## Power budget

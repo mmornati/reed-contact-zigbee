@@ -1,5 +1,7 @@
 # 5. Troubleshooting
 
+🌐 **English** · [Français](fr/05-troubleshooting.md) · [Italiano](it/05-troubleshooting.md)
+
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Compile error *"Select Tools → Zigbee mode…"* | Wrong Zigbee mode | Tools → Zigbee mode → **Zigbee ZCZR**, Partition → **Zigbee ZCZR 4MB with spiffs** |

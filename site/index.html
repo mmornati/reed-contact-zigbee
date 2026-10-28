@@ -65,6 +65,16 @@
     nav.top ul a { color: var(--muted); font-size: 14px; font-weight: 500; }
     nav.top ul a:hover { color: var(--text); text-decoration: none; }
     @media (min-width: 900px) { nav.top ul { display: flex; } }
+    .nav-end { display: flex; align-items: center; gap: 10px; }
+    .lang { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); }
+    .lang button {
+      font: 600 12px var(--mono); letter-spacing: .04em; color: var(--muted);
+      background: none; border: 0; border-radius: 7px; padding: 5px 9px; cursor: pointer;
+    }
+    .lang button:hover { color: var(--text); }
+    .lang button[aria-pressed="true"] { background: var(--amber); color: #1b1204; }
+    .lang button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+    @media (max-width: 520px) { .gh-label { display: none; } .brand { font-size: 15px; } }
 
     .btn {
       display: inline-flex; align-items: center; gap: 10px;
@@ -314,31 +324,38 @@
       Reed Contact Zigbee
     </a>
     <ul>
-      <li><a href="#why">Why</a></li>
-      <li><a href="#uses">Uses</a></li>
-      <li><a href="#flash">Flash</a></li>
-      <li><a href="#garage">Garage example</a></li>
-      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#why" data-i18n="nav.why">Why</a></li>
+      <li><a href="#uses" data-i18n="nav.uses">Uses</a></li>
+      <li><a href="#flash" data-i18n="nav.flash">Flash</a></li>
+      <li><a href="#garage" data-i18n="nav.garage">Garage example</a></li>
+      <li><a href="#faq" data-i18n="nav.faq">FAQ</a></li>
     </ul>
-    <a class="btn btn-ghost btn-sm" href="https://github.com/mmornati/reed-contact-zigbee">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      GitHub
-    </a>
+    <div class="nav-end">
+      <div class="lang" role="group" aria-label="Language" data-i18n-attr="aria-label:nav.language">
+        <button type="button" data-lang="en" lang="en" title="English">EN</button>
+        <button type="button" data-lang="fr" lang="fr" title="Français">FR</button>
+        <button type="button" data-lang="it" lang="it" title="Italiano">IT</button>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="https://github.com/mmornati/reed-contact-zigbee" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span class="gh-label">GitHub</span>
+      </a>
+    </div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow"><span class="dot"></span>Open source · Zigbee 3.0 · No cloud</span>
-      <h1>Know it's <span class="grad">closed.</span></h1>
-      <p class="lede">A mains-powered <strong>Zigbee contact sensor</strong> that also <strong>strengthens your mesh</strong>. A Seeed XIAO ESP32-C6 and a €1 reed switch, ready for <strong>Zigbee2MQTT</strong> and <strong>Home Assistant</strong>. Flash it from your browser in under a minute.</p>
+      <span class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow">Open source · Zigbee 3.0 · No cloud</span></span>
+      <h1 data-i18n="hero.title">Know it's <span class="grad">closed.</span></h1>
+      <p class="lede" data-i18n="hero.lede">A mains-powered <strong>Zigbee contact sensor</strong> that also <strong>strengthens your mesh</strong>. A Seeed XIAO ESP32-C6 and a €1 reed switch, ready for <strong>Zigbee2MQTT</strong> and <strong>Home Assistant</strong>. Flash it from your browser in under a minute.</p>
       <div class="cta">
         <a class="btn btn-primary" href="#flash">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          Flash from your browser
+          <span data-i18n="hero.ctaFlash">Flash from your browser</span>
         </a>
-        <a class="btn btn-ghost" href="https://github.com/mmornati/reed-contact-zigbee#readme">Read the build guide</a>
+        <a class="btn btn-ghost" data-readme href="https://github.com/mmornati/reed-contact-zigbee#readme" data-i18n="hero.ctaGuide">Read the build guide</a>
       </div>
       <div class="chips">
         <span class="chip">ESP32-C6</span><span class="chip">IAS Zone contact</span><span class="chip">Zigbee router</span><span class="chip">Zigbee2MQTT</span><span class="chip">Home Assistant</span><span class="chip">MIT</span>
@@ -347,10 +364,10 @@
 
     <div class="demo is-closed" id="demo">
       <div class="demo-head">
-        <span class="demo-title">LIVE DEMO · garage door</span>
+        <span class="demo-title" data-i18n="demo.title">LIVE DEMO · garage door</span>
         <span class="state-pill"><span class="led"></span><span id="state-text">Closed</span></span>
       </div>
-      <svg class="scene" id="scene" viewBox="0 0 520 330" role="img" aria-label="A door with a magnet sliding away from a reed switch">
+      <svg class="scene" id="scene" viewBox="0 0 520 330" role="img" aria-label="A door with a magnet sliding away from a reed switch" data-i18n-attr="aria-label:demo.sceneLabel">
         <defs>
           <linearGradient id="slat" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2a3558"/><stop offset="1" stop-color="#1e2744"/></linearGradient>
           <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffb547" stop-opacity=".55"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/></radialGradient>
@@ -391,32 +408,32 @@
         </g>
       </svg>
       <div class="payload" aria-live="polite"><span class="c">// zigbee2mqtt/garage_door_sensor</span><br>{ <span class="k">"contact"</span>: <span class="b" id="payload-val">true</span>, <span class="k">"linkquality"</span>: 236 }</div>
-      <div class="demo-hint">Tap the door to open or close it</div>
+      <div class="demo-hint" data-i18n="demo.hint">Tap the door to open or close it</div>
     </div>
   </div>
 </header>
 
 <section id="why">
   <div class="wrap">
-    <span class="kicker">Why build it</span>
-    <h2>A contact sensor that pulls its weight.</h2>
-    <p class="sub">Battery sensors report and go back to sleep. This one stays awake, relays your other Zigbee devices, and tells you when something's wrong instead of failing silently.</p>
+    <span class="kicker" data-i18n="why.kicker">Why build it</span>
+    <h2 data-i18n="why.title">A contact sensor that pulls its weight.</h2>
+    <p class="sub" data-i18n="why.sub">Battery sensors report and go back to sleep. This one stays awake, relays your other Zigbee devices, and tells you when something's wrong instead of failing silently.</p>
     <div class="features">
       <div class="card">
-        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><h3>A Zigbee router, too</h3></div>
-        <p>Mains powered, so it routes traffic for every Zigbee device nearby. Your garage, shed or gate finally gets solid coverage.</p>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><h3 data-i18n="why.router.title">A Zigbee router, too</h3></div>
+        <p data-i18n="why.router.text">Mains powered, so it routes traffic for every Zigbee device nearby. Your garage, shed or gate finally gets solid coverage.</p>
       </div>
       <div class="card">
-        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Fail-safe by design</h3></div>
-        <p>Only a magnet in place reads <em>closed</em>. A cut wire, a loose connector or a dead sensor all show up as <em>open</em>, never as a false "all good".</p>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3 data-i18n="why.failsafe.title">Fail-safe by design</h3></div>
+        <p data-i18n="why.failsafe.text">Only a magnet in place reads <em>closed</em>. A cut wire, a loose connector or a dead sensor all show up as <em>open</em>, never as a false "all good".</p>
       </div>
       <div class="card">
-        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><h3>Z2M &amp; HA native</h3></div>
-        <p>A standard IAS Zone contact. One tiny converter and it shows up as a door/window sensor in Home Assistant.</p>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><h3 data-i18n="why.native.title">Z2M &amp; HA native</h3></div>
+        <p data-i18n="why.native.text">A standard IAS Zone contact. One tiny converter and it shows up as a door/window sensor in Home Assistant.</p>
       </div>
       <div class="card">
-        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></span><h3>No WiFi, no cloud</h3></div>
-        <p>No passwords, IPs or app accounts. It keeps working when your WiFi doesn't, and nothing leaves your house.</p>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></span><h3 data-i18n="why.nocloud.title">No WiFi, no cloud</h3></div>
+        <p data-i18n="why.nocloud.text">No passwords, IPs or app accounts. It keeps working when your WiFi doesn't, and nothing leaves your house.</p>
       </div>
     </div>
   </div>
@@ -424,60 +441,60 @@
 
 <section id="uses" class="alt">
   <div class="wrap">
-    <span class="kicker">Put it anywhere</span>
-    <h2>If a magnet can move, you can watch it.</h2>
-    <p class="sub">The reed goes on the fixed part, the magnet on the moving part. The same firmware works for all of these.</p>
+    <span class="kicker" data-i18n="uses.kicker">Put it anywhere</span>
+    <h2 data-i18n="uses.title">If a magnet can move, you can watch it.</h2>
+    <p class="sub" data-i18n="uses.sub">The reed goes on the fixed part, the magnet on the moving part. The same firmware works for all of these.</p>
     <div class="uses">
-      <div class="use featured"><span class="tag">FULL GUIDE</span><span class="emoji" aria-hidden="true">🚗</span><h3>Garage door</h3><p>Detects "not <em>fully</em> closed", even a door that stopped 5 cm early. Pairs with a Zigbee relay for a real open/close cover.</p></div>
-      <div class="use"><span class="emoji" aria-hidden="true">🚧</span><h3>Gate</h3><p>Sliding or swing. Long cable runs are fine.</p></div>
-      <div class="use"><span class="emoji" aria-hidden="true">🚪</span><h3>Doors</h3><p>A recessed reed is invisible once fitted.</p></div>
-      <div class="use"><span class="emoji" aria-hidden="true">🪟</span><h3>Windows</h3><p>Skylights, tilt-and-turn, roof windows.</p></div>
-      <div class="use"><span class="emoji" aria-hidden="true">🛖</span><h3>Shed &amp; cellar</h3><p>Out of WiFi range, inside the mesh.</p></div>
-      <div class="use"><span class="emoji" aria-hidden="true">📬</span><h3>Mailbox</h3><p>"You've got mail" on every flap.</p></div>
-      <div class="use"><span class="emoji" aria-hidden="true">🧊</span><h3>Freezer &amp; fridge</h3><p>"Left open for 5 minutes" alerts.</p></div>
+      <div class="use featured"><span class="tag" data-i18n="uses.tag">FULL GUIDE</span><span class="emoji" aria-hidden="true">🚗</span><h3 data-i18n="uses.garage.title">Garage door</h3><p data-i18n="uses.garage.text">Detects "not <em>fully</em> closed", even a door that stopped 5 cm early. Pairs with a Zigbee relay for a real open/close cover.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🚧</span><h3 data-i18n="uses.gate.title">Gate</h3><p data-i18n="uses.gate.text">Sliding or swing. Long cable runs are fine.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🚪</span><h3 data-i18n="uses.doors.title">Doors</h3><p data-i18n="uses.doors.text">A recessed reed is invisible once fitted.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🪟</span><h3 data-i18n="uses.windows.title">Windows</h3><p data-i18n="uses.windows.text">Skylights, tilt-and-turn, roof windows.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🛖</span><h3 data-i18n="uses.shed.title">Shed &amp; cellar</h3><p data-i18n="uses.shed.text">Out of WiFi range, inside the mesh.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">📬</span><h3 data-i18n="uses.mailbox.title">Mailbox</h3><p data-i18n="uses.mailbox.text">"You've got mail" on every flap.</p></div>
+      <div class="use"><span class="emoji" aria-hidden="true">🧊</span><h3 data-i18n="uses.freezer.title">Freezer &amp; fridge</h3><p data-i18n="uses.freezer.text">"Left open for 5 minutes" alerts.</p></div>
     </div>
   </div>
 </section>
 
 <section id="how">
   <div class="wrap">
-    <span class="kicker">How it works</span>
-    <h2>From a magnet to an automation.</h2>
-    <p class="sub">The reed closes when the magnet is near. The ESP32-C6 debounces it, reports it as a Zigbee IAS Zone, and re-sends it every 5 minutes so Home Assistant never holds a stale state.</p>
+    <span class="kicker" data-i18n="how.kicker">How it works</span>
+    <h2 data-i18n="how.title">From a magnet to an automation.</h2>
+    <p class="sub" data-i18n="how.sub">The reed closes when the magnet is near. The ESP32-C6 debounces it, reports it as a Zigbee IAS Zone, and re-sends it every 5 minutes so Home Assistant never holds a stale state.</p>
     <div class="flow">
-      <div class="node"><span class="big" aria-hidden="true">🧲</span><strong>Reed + magnet</strong><span class="s">NO contact to GND</span></div>
+      <div class="node"><span class="big" aria-hidden="true">🧲</span><strong data-i18n="how.reed.title">Reed + magnet</strong><span class="s" data-i18n="how.reed.text">NO contact to GND</span></div>
       <div class="node"><span class="big" aria-hidden="true">🔌</span><strong>XIAO ESP32-C6</strong><span class="s">200 ms debounce · router</span></div>
-      <div class="node"><span class="big" aria-hidden="true">📡</span><strong>Zigbee mesh</strong><span class="s">IAS Zone contact</span></div>
+      <div class="node"><span class="big" aria-hidden="true">📡</span><strong data-i18n="how.mesh.title">Zigbee mesh</strong><span class="s">IAS Zone contact</span></div>
       <div class="node"><span class="big" aria-hidden="true">🔁</span><strong>Zigbee2MQTT</strong><span class="s"><code>contact: true</code></span></div>
-      <div class="node"><span class="big" aria-hidden="true">🏠</span><strong>Home Assistant</strong><span class="s">binary_sensor · door</span></div>
+      <div class="node"><span class="big" aria-hidden="true">🏠</span><strong>Home Assistant</strong><span class="s" data-i18n="how.ha.text">binary_sensor · door</span></div>
     </div>
   </div>
 </section>
 
 <section id="flash" class="alt">
   <div class="wrap">
-    <span class="kicker">Flash</span>
-    <h2>No toolchain. Just a USB cable.</h2>
-    <p class="sub">Plug the XIAO ESP32-C6 into your computer and flash the latest firmware straight from this page. Prefer to build it yourself? It's a single <code>pio run</code>.</p>
+    <span class="kicker" data-i18n="flash.kicker">Flash</span>
+    <h2 data-i18n="flash.title">No toolchain. Just a USB cable.</h2>
+    <p class="sub" data-i18n="flash.sub">Plug the XIAO ESP32-C6 into your computer and flash the latest firmware straight from this page. Prefer to build it yourself? It's a single <code>pio run</code>.</p>
     <div class="flash-grid">
       <div class="flash-card">
-        <h3>Install the firmware</h3>
-        <p>Works in Chrome and Edge on desktop (Web Serial). On first install, choose <strong>Erase device</strong> so the Zigbee stack starts clean.</p>
+        <h3 data-i18n="flash.card.title">Install the firmware</h3>
+        <p data-i18n="flash.card.text">Works in Chrome and Edge on desktop (Web Serial). On first install, choose <strong>Erase device</strong> so the Zigbee stack starts clean.</p>
         <esp-web-install-button manifest="firmware/manifest.json">
           <button slot="activate" class="btn btn-primary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            Connect &amp; install
+            <span data-i18n="flash.card.button">Connect &amp; install</span>
           </button>
-          <span slot="unsupported" class="unsupported">Your browser doesn't support Web Serial. Open this page in Chrome or Edge on a computer.</span>
-          <span slot="not-allowed" class="unsupported">Web Serial needs a secure (https) page.</span>
+          <span slot="unsupported" class="unsupported" data-i18n="flash.card.unsupported">Your browser doesn't support Web Serial. Open this page in Chrome or Edge on a computer.</span>
+          <span slot="not-allowed" class="unsupported" data-i18n="flash.card.notAllowed">Web Serial needs a secure (https) page.</span>
         </esp-web-install-button>
         <div class="version">firmware · __FIRMWARE_VERSION__ · XIAO ESP32-C6 · Zigbee router</div>
       </div>
       <ol class="steps">
-        <li><strong>Connect the board</strong>USB-C to your computer, with nothing else powering it.</li>
-        <li><strong>Flash it</strong>Click <em>Connect &amp; install</em>, pick the serial port, and accept the erase on the first install.</li>
-        <li><strong>Add the converter</strong>Drop <code>reed_contact.mjs</code> into Zigbee2MQTT's <code>external_converters/</code> folder and restart it.</li>
-        <li><strong>Pair</strong>Click <em>Permit join</em>. The LED blinks while it searches and goes dark once it joins. Hold BOOT for 3 s to reset.</li>
+        <li data-i18n="flash.step1"><strong>Connect the board</strong>USB-C to your computer, with nothing else powering it.</li>
+        <li data-i18n="flash.step2"><strong>Flash it</strong>Click <em>Connect &amp; install</em>, pick the serial port, and accept the erase on the first install.</li>
+        <li data-i18n="flash.step3"><strong>Add the converter</strong>Drop <code>reed_contact.mjs</code> into Zigbee2MQTT's <code>external_converters/</code> folder and restart it.</li>
+        <li data-i18n="flash.step4"><strong>Pair</strong>Click <em>Permit join</em>. The LED blinks while it searches and goes dark once it joins. Hold BOOT for 3 s to reset.</li>
       </ol>
     </div>
   </div>
@@ -486,10 +503,10 @@
 <section id="converter">
   <div class="wrap">
     <span class="kicker">Zigbee2MQTT</span>
-    <h2>Twelve lines and you're paired.</h2>
-    <p class="sub">The converter uses Zigbee2MQTT's own building blocks, and CI checks it against the same library Z2M runs. The model string is verified against the firmware source on every commit.</p>
+    <h2 data-i18n="converter.title">Twelve lines and you're paired.</h2>
+    <p class="sub" data-i18n="converter.sub">The converter uses Zigbee2MQTT's own building blocks, and CI checks it against the same library Z2M runs. The model string is verified against the firmware source on every commit.</p>
     <div class="code">
-      <div class="code-bar"><span>external_converters/reed_contact.mjs</span><button class="copy" data-copy="converter-src">Copy</button></div>
+      <div class="code-bar"><span>external_converters/reed_contact.mjs</span><button class="copy" data-copy="converter-src" data-i18n="js.copy">Copy</button></div>
 <pre id="converter-src"><span class="tk-k">import</span> * <span class="tk-k">as</span> m <span class="tk-k">from</span> <span class="tk-s">'zigbee-herdsman-converters/lib/modernExtend'</span>;
 
 <span class="tk-k">export default</span> {
@@ -507,38 +524,38 @@
 <section id="garage" class="alt">
   <div class="wrap garage">
     <div>
-      <span class="kicker">Worked example</span>
-      <h2>The garage door that tells you it didn't close.</h2>
-      <p class="sub" style="margin-bottom:28px">The full guide pairs the sensor with a ZB-SW01 Zigbee relay on the motor's push-button input. A ready-made Home Assistant package turns the two into a proper <code>cover</code>.</p>
+      <span class="kicker" data-i18n="garage.kicker">Worked example</span>
+      <h2 data-i18n="garage.title">The garage door that tells you it didn't close.</h2>
+      <p class="sub" style="margin-bottom:28px" data-i18n="garage.sub">The full guide pairs the sensor with a ZB-SW01 Zigbee relay on the motor's push-button input. A ready-made Home Assistant package turns the two into a proper <code>cover</code>.</p>
       <ul class="checks">
-        <li><span class="ic" aria-hidden="true">🔒</span><div><strong>Close &amp; verify</strong><span>Asks the motor to close, then checks the door really shut within 90 s.</span></div></li>
-        <li><span class="ic" aria-hidden="true">⏱️</span><div><strong>Left-open alert</strong><span>Notifies you after N minutes. You choose N from the dashboard.</span></div></li>
-        <li><span class="ic" aria-hidden="true">🌙</span><div><strong>Night check</strong><span>A 22:00 reminder if the door isn't shut.</span></div></li>
-        <li><span class="ic" aria-hidden="true">📴</span><div><strong>Sensor offline</strong><span>Know when the sensor itself stops reporting.</span></div></li>
+        <li><span class="ic" aria-hidden="true">🔒</span><div><strong data-i18n="garage.verify.title">Close &amp; verify</strong><span data-i18n="garage.verify.text">Asks the motor to close, then checks the door really shut within 90 s.</span></div></li>
+        <li><span class="ic" aria-hidden="true">⏱️</span><div><strong data-i18n="garage.open.title">Left-open alert</strong><span data-i18n="garage.open.text">Notifies you after N minutes. You choose N from the dashboard.</span></div></li>
+        <li><span class="ic" aria-hidden="true">🌙</span><div><strong data-i18n="garage.night.title">Night check</strong><span data-i18n="garage.night.text">A 22:00 reminder if the door isn't shut.</span></div></li>
+        <li><span class="ic" aria-hidden="true">📴</span><div><strong data-i18n="garage.offline.title">Sensor offline</strong><span data-i18n="garage.offline.text">Know when the sensor itself stops reporting.</span></div></li>
       </ul>
     </div>
     <div>
-      <div class="notif"><div class="notif-head"><b>Home Assistant</b><span>now</span></div><strong>Garage door</strong><p>Close was requested but the door is still not fully closed after 90 s.</p></div>
-      <div class="notif"><div class="notif-head"><b>Home Assistant</b><span>22:00</span></div><strong>Garage door</strong><p>It's 22:00 and the garage door is not fully closed.</p></div>
+      <div class="notif"><div class="notif-head"><b>Home Assistant</b><span data-i18n="garage.notif.now">now</span></div><strong data-i18n="garage.notif.title">Garage door</strong><p data-i18n="garage.notif1">Close was requested but the door is still not fully closed after 90 s.</p></div>
+      <div class="notif"><div class="notif-head"><b>Home Assistant</b><span>22:00</span></div><strong data-i18n="garage.notif.title">Garage door</strong><p data-i18n="garage.notif2">It's 22:00 and the garage door is not fully closed.</p></div>
     </div>
   </div>
 </section>
 
 <section id="bom">
   <div class="wrap">
-    <span class="kicker">Bill of materials</span>
-    <h2>About €15 of parts.</h2>
-    <p class="sub">Plus the 12 V supply you probably already have near a motor or an access-control kit.</p>
+    <span class="kicker" data-i18n="bom.kicker">Bill of materials</span>
+    <h2 data-i18n="bom.title">About €15 of parts.</h2>
+    <p class="sub" data-i18n="bom.sub">Plus the 12 V supply you probably already have near a motor or an access-control kit.</p>
     <div class="bom-wrap">
       <table class="bom">
-        <thead><tr><th>Part</th><th>Why</th><th>Approx.</th></tr></thead>
+        <thead><tr><th data-i18n="bom.part">Part</th><th data-i18n="bom.why">Why</th><th data-i18n="bom.price">Approx.</th></tr></thead>
         <tbody>
-          <tr><td>Seeed XIAO ESP32-C6</td><td>Zigbee radio + MCU, U.FL antenna connector</td><td>€6</td></tr>
-          <tr><td>2.4 GHz U.FL antenna</td><td>Range from inside a box</td><td>€2</td></tr>
-          <tr><td>Reed switch (NO/NC) + magnet</td><td>The sensor itself</td><td>€1–3</td></tr>
-          <tr><td>LM2596 buck converter</td><td>12–24 V → 5 V</td><td>€1–2</td></tr>
-          <tr><td>IP65/67 enclosure + glands</td><td>Garage, gate or garden ready</td><td>€5</td></tr>
-          <tr><td>10 kΩ + 100 nF</td><td>Clean signal on long cables</td><td>cents</td></tr>
+          <tr><td>Seeed XIAO ESP32-C6</td><td data-i18n="bom.xiao">Zigbee radio + MCU, U.FL antenna connector</td><td>€6</td></tr>
+          <tr><td data-i18n="bom.antenna.name">2.4 GHz U.FL antenna</td><td data-i18n="bom.antenna">Range from inside a box</td><td>€2</td></tr>
+          <tr><td data-i18n="bom.reed.name">Reed switch (NO/NC) + magnet</td><td data-i18n="bom.reed">The sensor itself</td><td>€1–3</td></tr>
+          <tr><td data-i18n="bom.buck.name">LM2596 buck converter</td><td>12–24 V → 5 V</td><td>€1–2</td></tr>
+          <tr><td data-i18n="bom.box.name">IP65/67 enclosure + glands</td><td data-i18n="bom.box">Garage, gate or garden ready</td><td>€5</td></tr>
+          <tr><td>10 kΩ + 100 nF</td><td data-i18n="bom.rc">Clean signal on long cables</td><td data-i18n="bom.cents">cents</td></tr>
         </tbody>
       </table>
     </div>
@@ -548,31 +565,31 @@
 <section id="faq" class="alt">
   <div class="wrap">
     <span class="kicker">FAQ</span>
-    <h2>Good questions.</h2>
+    <h2 data-i18n="faq.title">Good questions.</h2>
     <div class="faq">
       <details open>
-        <summary>Why Zigbee and not WiFi / ESPHome?</summary>
-        <p>For a single contact, Zigbee wins: it joins the mesh your other sensors already use, needs no credentials, survives WiFi outages and, being mains powered, adds a router where you usually need one. The trade-off is firmware updates over USB instead of over WiFi, and a small Z2M converter. For a device you install once, that's a good deal.</p>
+        <summary data-i18n="faq.zigbee.q">Why Zigbee and not WiFi / ESPHome?</summary>
+        <p data-i18n="faq.zigbee.a">For a single contact, Zigbee wins: it joins the mesh your other sensors already use, needs no credentials, survives WiFi outages and, being mains powered, adds a router where you usually need one. The trade-off is firmware updates over USB instead of over WiFi, and a small Z2M converter. For a device you install once, that's a good deal.</p>
       </details>
       <details>
-        <summary>Why the Arduino framework instead of ESP-IDF?</summary>
-        <p>Both run the same Espressif Zigbee stack. Arduino gets this sensor done in ~200 readable lines, which is easier for everyone to fork. ESP-IDF pays off for custom clusters, battery tuning down to the µA, or a commercial product.</p>
+        <summary data-i18n="faq.arduino.q">Why the Arduino framework instead of ESP-IDF?</summary>
+        <p data-i18n="faq.arduino.a">Both run the same Espressif Zigbee stack. Arduino gets this sensor done in ~200 readable lines, which is easier for everyone to fork. ESP-IDF pays off for custom clusters, battery tuning down to the µA, or a commercial product.</p>
       </details>
       <details>
-        <summary>Can it run on a battery?</summary>
-        <p>It can, but then it should become a sleepy end device and stop routing. Commercial battery sensors are cheaper for that. This project is for places where power is close by and a router is welcome.</p>
+        <summary data-i18n="faq.battery.q">Can it run on a battery?</summary>
+        <p data-i18n="faq.battery.a">It can, but then it should become a sleepy end device and stop routing. Commercial battery sensors are cheaper for that. This project is for places where power is close by and a router is welcome.</p>
       </details>
       <details>
-        <summary>How do I know it's working?</summary>
+        <summary data-i18n="faq.working.q">How do I know it's working?</summary>
         <ul>
-          <li>The LED blinks while searching for a network and turns off once joined.</li>
-          <li>Zigbee2MQTT shows it as a <strong>Router</strong> with <code>contact</code> flipping as you move the magnet.</li>
-          <li>The state is re-sent every 5 minutes, and Z2M availability flags it if it disappears.</li>
+          <li data-i18n="faq.working.a1">The LED blinks while searching for a network and turns off once joined.</li>
+          <li data-i18n="faq.working.a2">Zigbee2MQTT shows it as a <strong>Router</strong> with <code>contact</code> flipping as you move the magnet.</li>
+          <li data-i18n="faq.working.a3">The state is re-sent every 5 minutes, and Z2M availability flags it if it disappears.</li>
         </ul>
       </details>
       <details>
-        <summary>Is it tested?</summary>
-        <p>Every commit runs host unit tests for the debounce and heartbeat logic (including <code>millis()</code> rollover), builds with both PlatformIO and Arduino CLI, tests the converter against <code>zigbee-herdsman-converters</code>, and validates the Home Assistant package with Home Assistant's own config checker.</p>
+        <summary data-i18n="faq.tested.q">Is it tested?</summary>
+        <p data-i18n="faq.tested.a">Every commit runs host unit tests for the debounce and heartbeat logic (including <code>millis()</code> rollover), builds with both PlatformIO and Arduino CLI, tests the converter against <code>zigbee-herdsman-converters</code>, and validates the Home Assistant package with Home Assistant's own config checker.</p>
       </details>
     </div>
   </div>
@@ -580,81 +597,147 @@
 
 <section id="docs">
   <div class="wrap">
-    <span class="kicker">Documentation</span>
-    <h2>Everything, step by step.</h2>
-    <p class="sub">Wiring diagrams, a bench-first build, flashing, pairing and the Home Assistant package.</p>
+    <span class="kicker" data-i18n="docs.kicker">Documentation</span>
+    <h2 data-i18n="docs.title">Everything, step by step.</h2>
+    <p class="sub" data-i18n="docs.sub">Wiring diagrams, a bench-first build, flashing, pairing and the Home Assistant package.</p>
     <div class="docs">
-      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/01-hardware-and-wiring.md"><span class="n">01</span><strong>Hardware &amp; wiring</strong><span>Power, reed choice, diagram</span></a>
-      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/02-build-guide.md"><span class="n">02</span><strong>Step-by-step build</strong><span>Bench test to final install</span></a>
-      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/03-firmware.md"><span class="n">03</span><strong>Firmware</strong><span>PlatformIO or Arduino IDE</span></a>
-      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/04-zigbee2mqtt-and-home-assistant.md"><span class="n">04</span><strong>Z2M &amp; Home Assistant</strong><span>Converter, cover, alerts</span></a>
-      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/05-troubleshooting.md"><span class="n">05</span><strong>Troubleshooting</strong><span>Symptoms and fixes</span></a>
-      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/releases"><span class="n">↓</span><strong>Releases</strong><span>Firmware binaries &amp; checksums</span></a>
+      <a class="doc" data-doc="01-hardware-and-wiring.md" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/01-hardware-and-wiring.md"><span class="n">01</span><strong data-i18n="docs.d1.title">Hardware &amp; wiring</strong><span data-i18n="docs.d1.text">Power, reed choice, diagram</span></a>
+      <a class="doc" data-doc="02-build-guide.md" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/02-build-guide.md"><span class="n">02</span><strong data-i18n="docs.d2.title">Step-by-step build</strong><span data-i18n="docs.d2.text">Bench test to final install</span></a>
+      <a class="doc" data-doc="03-firmware.md" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/03-firmware.md"><span class="n">03</span><strong>Firmware</strong><span data-i18n="docs.d3.text">PlatformIO or Arduino IDE</span></a>
+      <a class="doc" data-doc="04-zigbee2mqtt-and-home-assistant.md" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/04-zigbee2mqtt-and-home-assistant.md"><span class="n">04</span><strong>Z2M &amp; Home Assistant</strong><span data-i18n="docs.d4.text">Converter, cover, alerts</span></a>
+      <a class="doc" data-doc="05-troubleshooting.md" href="https://github.com/mmornati/reed-contact-zigbee/blob/main/docs/05-troubleshooting.md"><span class="n">05</span><strong data-i18n="docs.d5.title">Troubleshooting</strong><span data-i18n="docs.d5.text">Symptoms and fixes</span></a>
+      <a class="doc" href="https://github.com/mmornati/reed-contact-zigbee/releases"><span class="n">↓</span><strong data-i18n="docs.releases.title">Releases</strong><span data-i18n="docs.releases.text">Firmware binaries &amp; checksums</span></a>
     </div>
   </div>
 </section>
 
 <section class="final">
   <div class="wrap">
-    <h2>Stop wondering if you closed it.</h2>
-    <p class="sub" style="margin:0 auto 32px">Fifteen euros, an afternoon, and one less thing to worry about.</p>
+    <h2 data-i18n="final.title">Stop wondering if you closed it.</h2>
+    <p class="sub" style="margin:0 auto 32px" data-i18n="final.sub">Fifteen euros, an afternoon, and one less thing to worry about.</p>
     <div class="cta">
-      <a class="btn btn-primary" href="#flash">Flash the firmware</a>
-      <a class="btn btn-ghost" href="https://github.com/mmornati/reed-contact-zigbee">Star on GitHub</a>
+      <a class="btn btn-primary" href="#flash" data-i18n="final.flash">Flash the firmware</a>
+      <a class="btn btn-ghost" href="https://github.com/mmornati/reed-contact-zigbee" data-i18n="final.star">Star on GitHub</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <span>Reed Contact Zigbee · MIT License · by <a href="https://github.com/mmornati">@mmornati</a></span>
-    <span>Not affiliated with Seeed Studio, Espressif, Zigbee2MQTT or Home Assistant.</span>
+    <span>Reed Contact Zigbee · <span data-i18n="footer.license">MIT License</span> · <span data-i18n="footer.by">by</span> <a href="https://github.com/mmornati">@mmornati</a></span>
+    <span data-i18n="footer.disclaimer">Not affiliated with Seeed Studio, Espressif, Zigbee2MQTT or Home Assistant.</span>
   </div>
 </footer>
 
-<script>
-  (function () {
-    var demo = document.getElementById('demo');
-    var scene = document.getElementById('scene');
-    var text = document.getElementById('state-text');
-    var val = document.getElementById('payload-val');
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var open = false;
-    var timer;
+<script type="module">
+  import {translations, SUPPORTED} from './i18n.js';
 
-    function render() {
-      demo.classList.toggle('is-open', open);
-      demo.classList.toggle('is-closed', !open);
-      text.textContent = open ? 'Open' : 'Closed';
-      // The reed only reports after the door has finished moving (debounce).
-      setTimeout(function () {
-        val.textContent = open ? 'false' : 'true';
-        scene.classList.remove('pulse');
-        void scene.getBoundingClientRect();
-        scene.classList.add('pulse');
-      }, reduced ? 0 : 450);
+  const REPO = 'https://github.com/mmornati/reed-contact-zigbee/blob/main/';
+  const english = {};
+  const englishAttrs = [];
+  const metaDescription = document.querySelector('meta[name="description"]');
+  english['meta.description'] = metaDescription.content;
+  for (const el of document.querySelectorAll('[data-i18n]')) {
+    english[el.dataset.i18n] ??= el.innerHTML;
+  }
+  for (const el of document.querySelectorAll('[data-i18n-attr]')) {
+    const [attr, key] = el.dataset.i18nAttr.split(':');
+    english[key] ??= el.getAttribute(attr);
+    englishAttrs.push({el, attr, key});
+  }
+  english['js.open'] = 'Open';
+  english['js.closed'] = 'Closed';
+  english['js.copied'] = 'Copied';
+
+  let lang = 'en';
+  const t = (key) => (lang !== 'en' && translations[lang][key]) || english[key];
+
+  function pickInitialLanguage() {
+    const fromUrl = new URLSearchParams(location.search).get('lang');
+    if (SUPPORTED.includes(fromUrl)) return fromUrl;
+    try {
+      const saved = localStorage.getItem('lang');
+      if (SUPPORTED.includes(saved)) return saved;
+    } catch (e) { /* storage unavailable */ }
+    for (const l of navigator.languages || [navigator.language]) {
+      const short = (l || '').slice(0, 2).toLowerCase();
+      if (SUPPORTED.includes(short)) return short;
     }
+    return 'en';
+  }
 
-    function toggle() { open = !open; render(); }
-
-    function schedule() {
-      clearInterval(timer);
-      if (!reduced) timer = setInterval(toggle, 3600);
+  function applyLanguage(next, {remember = false} = {}) {
+    lang = next;
+    document.documentElement.lang = lang;
+    for (const el of document.querySelectorAll('[data-i18n]')) el.innerHTML = t(el.dataset.i18n);
+    for (const {el, attr, key} of englishAttrs) el.setAttribute(attr, t(key));
+    metaDescription.content = t('meta.description');
+    document.getElementById('state-text').textContent = t(demoOpen() ? 'js.open' : 'js.closed');
+    for (const a of document.querySelectorAll('[data-doc]')) {
+      a.href = REPO + 'docs/' + (lang === 'en' ? '' : lang + '/') + a.dataset.doc;
     }
+    for (const a of document.querySelectorAll('[data-readme]')) {
+      a.href = lang === 'en' ? 'https://github.com/mmornati/reed-contact-zigbee#readme' : REPO + 'README.' + lang + '.md';
+    }
+    for (const b of document.querySelectorAll('.lang button')) {
+      b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+    }
+    if (remember) {
+      try { localStorage.setItem('lang', lang); } catch (e) { /* storage unavailable */ }
+      const url = new URL(location.href);
+      if (lang === 'en') url.searchParams.delete('lang'); else url.searchParams.set('lang', lang);
+      history.replaceState(null, '', url);
+    }
+  }
 
-    scene.addEventListener('click', function () { toggle(); schedule(); });
-    schedule();
+  for (const b of document.querySelectorAll('.lang button')) {
+    b.addEventListener('click', () => applyLanguage(b.dataset.lang, {remember: true}));
+  }
 
-    document.querySelectorAll('.copy').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var src = document.getElementById(btn.dataset.copy).innerText;
-        navigator.clipboard.writeText(src).then(function () {
-          btn.textContent = 'Copied';
-          setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
-        });
+  /* ---------- Live demo ---------- */
+  const demo = document.getElementById('demo');
+  const scene = document.getElementById('scene');
+  const stateText = document.getElementById('state-text');
+  const val = document.getElementById('payload-val');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let open = false;
+  let timer;
+  function demoOpen() { return open; }
+
+  function render() {
+    demo.classList.toggle('is-open', open);
+    demo.classList.toggle('is-closed', !open);
+    stateText.textContent = t(open ? 'js.open' : 'js.closed');
+    // The reed only reports after the door has finished moving (debounce).
+    setTimeout(() => {
+      val.textContent = open ? 'false' : 'true';
+      scene.classList.remove('pulse');
+      void scene.getBoundingClientRect();
+      scene.classList.add('pulse');
+    }, reduced ? 0 : 450);
+  }
+
+  function toggle() { open = !open; render(); }
+
+  function schedule() {
+    clearInterval(timer);
+    if (!reduced) timer = setInterval(toggle, 3600);
+  }
+
+  scene.addEventListener('click', () => { toggle(); schedule(); });
+  schedule();
+
+  for (const btn of document.querySelectorAll('.copy')) {
+    btn.addEventListener('click', () => {
+      const src = document.getElementById(btn.dataset.copy).innerText;
+      navigator.clipboard.writeText(src).then(() => {
+        btn.textContent = t('js.copied');
+        setTimeout(() => { btn.textContent = t('js.copy'); }, 1500);
       });
     });
-  })();
+  }
+
+  applyLanguage(pickInitialLanguage());
 </script>
 </body>
 </html>
