@@ -18,7 +18,7 @@ jobs:
     name: Firmware unit tests (host)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -31,7 +31,7 @@ jobs:
     name: Firmware build (PlatformIO)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -59,7 +59,7 @@ jobs:
       ESP32_INDEX: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
       FQBN: esp32:esp32:XIAO_ESP32C6:ZigbeeMode=zczr,PartitionScheme=zigbee_zczr
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: arduino/setup-arduino-cli@v2
       - uses: actions/cache@v4
         with:
@@ -79,7 +79,7 @@ jobs:
       run:
         working-directory: zigbee2mqtt
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -92,7 +92,7 @@ jobs:
     name: Home Assistant config check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Validate package with Home Assistant
         run: homeassistant/ci/check_config.sh
 
@@ -100,7 +100,7 @@ jobs:
     name: Docs links
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Check local links
         uses: lycheeverse/lychee-action@v2
         with:
