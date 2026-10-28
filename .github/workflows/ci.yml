@@ -44,7 +44,7 @@ jobs:
       - name: Build
         run: pio run -d firmware -e xiao_esp32c6
       - name: Upload firmware
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: firmware-${{ github.sha }}
           path: |
