@@ -12,7 +12,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0e1a'/%3E%3Crect x='7' y='13' width='11' height='6' rx='2' fill='%2394a3b8'/%3E%3Crect x='20' y='12' width='5' height='8' rx='1.5' fill='%23ffb547'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module" integrity="sha384-f+fR3K1mnKB2tVps4hdEh+qJvLgH2bKw81Yn+eNE3+gE8YpqocjkxQON4k19I3e/" crossorigin="anonymous"></script>
   <style>
     :root {
@@ -30,9 +30,9 @@
       --rose: #ff6b81;
       --radius: 18px;
       --maxw: 1160px;
-      --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-      --display: "Space Grotesk", var(--font);
-      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --display: "Bricolage Grotesque", var(--font);
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -108,7 +108,7 @@
     .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); }
     h1 {
       font: 700 clamp(44px, 7vw, 76px)/1.02 var(--display);
-      letter-spacing: -0.035em; margin: 22px 0 18px;
+      letter-spacing: -0.015em; margin: 22px 0 18px;
     }
     h1 .grad { color: var(--amber); }
     .lede { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 560px; margin: 0 0 32px; }
@@ -176,11 +176,10 @@
     }
     .card:hover { border-color: color-mix(in srgb, var(--amber) 45%, var(--line)); transform: translateY(-2px); }
     .card p { color: var(--muted); margin: 0; font-size: 15px; }
-    .icon {
-      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px;
-      background: rgba(255, 181, 71, .1); color: var(--amber); border: 1px solid rgba(255, 181, 71, .25);
-    }
-    .icon svg { width: 22px; height: 22px; }
+    .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .card-head h3 { margin: 0; }
+    .icon { flex: none; display: inline-flex; color: var(--amber); }
+    .icon svg { width: 24px; height: 24px; }
 
     .uses { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
     @media (min-width: 760px) { .uses { grid-template-columns: repeat(4, 1fr); } }
@@ -383,7 +382,7 @@
         <g>
           <rect x="414" y="150" width="68" height="84" rx="8" fill="#141b2f" stroke="#3ee6a8" stroke-width="1.5"/>
           <rect x="430" y="168" width="36" height="30" rx="3" fill="#25304f"/>
-          <text x="448" y="220" fill="#9aa6c2" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">C6</text>
+          <text x="448" y="220" fill="#9aa6c2" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="middle">C6</text>
           <line x1="448" y1="150" x2="448" y2="112" stroke="#9aa6c2" stroke-width="2"/>
           <circle cx="448" cy="108" r="4" fill="#ffb547"/>
           <circle class="wave" cx="448" cy="108" r="22" fill="none" stroke="#ffb547" stroke-width="2"/>
@@ -404,23 +403,19 @@
     <p class="sub">Battery sensors report and go back to sleep. This one stays awake, relays your other Zigbee devices, and tells you when something's wrong instead of failing silently.</p>
     <div class="features">
       <div class="card">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></div>
-        <h3>A Zigbee router, too</h3>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span><h3>A Zigbee router, too</h3></div>
         <p>Mains powered, so it routes traffic for every Zigbee device nearby. Your garage, shed or gate finally gets solid coverage.</p>
       </div>
       <div class="card">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
-        <h3>Fail-safe by design</h3>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Fail-safe by design</h3></div>
         <p>Only a magnet in place reads <em>closed</em>. A cut wire, a loose connector or a dead sensor all show up as <em>open</em>, never as a false "all good".</p>
       </div>
       <div class="card">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></div>
-        <h3>Z2M &amp; HA native</h3>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><h3>Z2M &amp; HA native</h3></div>
         <p>A standard IAS Zone contact. One tiny converter and it shows up as a door/window sensor in Home Assistant.</p>
       </div>
       <div class="card">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></div>
-        <h3>No WiFi, no cloud</h3>
+        <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 4.17-2.65"/><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"/><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"/><path d="M5 13a10 10 0 0 1 5.24-2.76"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></span><h3>No WiFi, no cloud</h3></div>
         <p>No passwords, IPs or app accounts. It keeps working when your WiFi doesn't, and nothing leaves your house.</p>
       </div>
     </div>
