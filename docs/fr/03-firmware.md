@@ -4,6 +4,8 @@
 
 Sketch : [`firmware/reed_contact/reed_contact.ino`](../../firmware/reed_contact/reed_contact.ino)
 
+> **Deux firmwares au choix, le même matériel.** Ce guide décrit le firmware Arduino (options A et B). Si vous gérez déjà vos appareils avec ESPHome, vous pouvez flasher [`esphome/reed-contact.yaml`](../../esphome/reed-contact.yaml) à la place : la section *Option C : ESPHome* plus bas explique les différences et comment le flasher. Le câblage est identique dans les deux cas.
+
 ## Ce qu'il fait
 
 - Démarre en tant que **routeur Zigbee** : il reste toujours allumé et relaie le trafic des autres appareils.
@@ -101,3 +103,79 @@ Pour utiliser plutôt l'antenne céramique intégrée, supprimez l'appel à `use
 ## Mises à jour ultérieures
 
 Débranchez le 12 V, branchez l'USB et téléversez **sans effacer** : un simple `pio run -t upload`, ou dans l'Arduino IDE avec *Erase All Flash = Disabled*. La carte conserve ses clés réseau et son enrôlement, et se reconnecte d'elle-même sans nouvel appairage.
+
+## Option C : ESPHome
+
+Si vous gérez déjà vos appareils avec [ESPHome](https://esphome.io/), vous pouvez flasher [`esphome/reed-contact.yaml`](../../esphome/reed-contact.yaml) à la place du sketch. Il utilise le support Zigbee natif d'ESPHome pour l'ESP32-C6 : c'est toujours un routeur Zigbee, sans WiFi. **Le câblage est exactement le même** : reed sur D2 / GPIO2 vers GND, antenne externe via GPIO3 / GPIO14, bouton BOOT sur GPIO9, LED sur GPIO15.
+
+### Firmware Arduino ou ESPHome ?
+
+| | Firmware Arduino (options A, B) | ESPHome (option C) |
+|---|---|---|
+| Cluster Zigbee | Contact **IAS Zone**, le standard des capteurs de porte/fenêtre | **Binary Input** : ESPHome ne gère pas encore l'IAS Zone |
+| Convertisseur Zigbee2MQTT | [`reed_contact.mjs`](../../zigbee2mqtt/reed_contact.mjs) | [`reed_contact_esphome.mjs`](../../zigbee2mqtt/reed_contact_esphome.mjs) |
+| Résultat dans Z2M et Home Assistant | `contact`, `binary_sensor` de classe *door* | le même |
+| ZHA et autres coordinateurs | Reconnu comme capteur d'ouverture | Vu comme une entrée binaire générique |
+| Chaîne de modèle | `C6ReedContact` | `C6ReedContactESPHome` |
+| Flasheur web et binaires des releases | Oui | Non, vous le compilez avec ESPHome |
+| Mises à jour | USB | USB. Par Zigbee uniquement avec la version OTA expérimentale (voir plus bas) |
+| Version d'ESPHome | | branche `dev` (2026.11 ou plus récente) |
+| Personnalisation | Modifier le sketch C++ | Modifier le YAML : un second reed, un relais ou une sonde de température tiennent en quelques lignes |
+
+Choisissez le firmware Arduino si vous voulez le capteur d'ouverture standard et le flash en un clic. Choisissez ESPHome si vous préférez le YAML et avez déjà une méthode de travail ESPHome.
+
+### Ce que fait le YAML
+
+Tout ce que fait le sketch, sauf l'enrôlement IAS Zone, inutile pour une Binary Input :
+
+- **Routeur** Zigbee, alimenté sur secteur, fabricant `DIY`, modèle `C6ReedContactESPHome`.
+- Bascule sur l'antenne externe U.FL au démarrage.
+- Lit le reed sur **GPIO2** avec la résistance de pull-up interne et un anti-rebond de **200 ms**. `presentValue` vaut `true` quand le reed est ouvert (aimant éloigné ou fil coupé) et `false` quand il est fermé : une panne se lit toujours comme *ouvert*.
+- Renvoie l'état **toutes les 5 minutes** (heartbeat).
+- **LED :** clignotement lent pendant la recherche d'un réseau, éteinte une fois le réseau rejoint.
+- **Réinitialisation d'usine :** maintenez **BOOT** 3 s, **puis relâchez**. La carte quitte le réseau et redémarre prête à être appairée. Le firmware Arduino se réinitialise pendant que vous maintenez le bouton ; ESPHome attend le relâchement.
+
+### Compiler et flasher
+
+1. Installez ESPHome depuis la branche `dev`. Le Zigbee natif et l'option `manufacturer` ne sont pas encore dans une version stable :
+
+   ```bash
+   uv tool install https://github.com/esphome/esphome/archive/dev.zip
+   ```
+
+   Ou `pip install https://github.com/esphome/esphome/archive/dev.zip` dans un virtualenv, ou l'image Docker `ghcr.io/esphome/esphome:dev`.
+2. Branchez le XIAO en USB-C (**sans** 12 V sur le buck). S'il exécutait le firmware Arduino, effacez-le d'abord pour ne pas garder d'anciennes données de réseau Zigbee :
+
+   ```bash
+   esptool --chip esp32c6 erase-flash
+   ```
+
+3. Compilez et téléversez (le premier lancement télécharge la chaîne de compilation ESP-IDF) :
+
+   ```bash
+   esphome run esphome/reed-contact.yaml
+   ```
+
+   Choisissez le port série USB quand il est demandé. Si le port n'est pas trouvé : maintenez **BOOT**, appuyez sur **RESET**, relâchez **BOOT**, puis réessayez.
+4. Suivez les logs avec `esphome logs esphome/reed-contact.yaml`.
+5. Installez [`zigbee2mqtt/reed_contact_esphome.mjs`](../../zigbee2mqtt/reed_contact_esphome.mjs) comme convertisseur Z2M, puis appairez comme décrit dans [le guide suivant](04-zigbee2mqtt-and-home-assistant.md).
+
+### Paramètres que vous pourriez modifier
+
+| Define Arduino | Dans le YAML |
+|---|---|
+| `REED_PIN` | `binary_sensor` → `contact` → `pin` → `number` |
+| `DEBOUNCE_MS` | `filters` → `delayed_on_off` |
+| `HEARTBEAT_MS` | l'entrée `5min` sous `interval` |
+| `FACTORY_RESET_HOLD_MS` | `on_click` → `min_length` |
+| `useExternalAntenna()` | le bloc `on_boot` (supprimez-le pour utiliser l'antenne céramique) |
+
+### Mettre à jour une version ESPHome
+
+L'OTA habituel d'ESPHome passe par le WiFi, que cette version n'utilise pas. Débranchez le 12 V, branchez l'USB et relancez `esphome run` **sans effacer** : la carte conserve ses clés réseau et se reconnecte sans nouvel appairage.
+
+Les mises à jour par Zigbee sont possibles avec un composant expérimental `ota: platform: zigbee`, en revue dans [mmornati/esphome#1](https://github.com/mmornati/esphome/pull/1) et pas encore intégré à ESPHome. Avec lui, Zigbee2MQTT envoie le nouveau firmware à travers le maillage. C'est lent (environ 30 minutes pour 360 Ko), prévoyez-le.
+
+### Passer d'une version à l'autre
+
+La chaîne de modèle change, donc Z2M voit un nouvel appareil. Supprimez-le dans Z2M, flashez l'autre version avec un effacement complet, appairez-le à nouveau et donnez-lui le même nom (`garage_door_sensor`). Home Assistant garde les mêmes identifiants d'entité.

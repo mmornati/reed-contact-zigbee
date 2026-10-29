@@ -26,6 +26,8 @@ No. Il sensore funziona da rete come router Zigbee, che è la configurazione mig
 
 ## Schema di collegamento
 
+Lo stesso cablaggio va bene per entrambi i firmware: lo sketch Arduino e lo [YAML di ESPHome](03-firmware.md) (opzione C) usano gli stessi pin (reed su D2 / GPIO2, commutatore d'antenna su GPIO3 / GPIO14, BOOT su GPIO9, LED su GPIO15).
+
 ```
           230 V AC                                   GARAGE DOOR MOTOR
              │                                      ┌────────────────────┐

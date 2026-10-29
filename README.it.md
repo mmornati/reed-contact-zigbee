@@ -63,7 +63,9 @@ Ovunque un magnete possa muoversi davanti a un contatto reed. Il reed va sulla p
    pio run -t erase && pio run -t upload
    ```
 
-3. **Aggiungi il converter.** Copia [`zigbee2mqtt/reed_contact.mjs`](zigbee2mqtt/reed_contact.mjs) nella cartella `external_converters/` di Zigbee2MQTT e riavvia Z2M.
+   Preferisci ESPHome? Flasha [`esphome/reed-contact.yaml`](esphome/reed-contact.yaml) al suo posto, con lo stesso cablaggio. [Le differenze →](docs/it/03-firmware.md)
+
+3. **Aggiungi il converter.** Copia [`zigbee2mqtt/reed_contact.mjs`](zigbee2mqtt/reed_contact.mjs) nella cartella `external_converters/` di Zigbee2MQTT e riavvia Z2M (per la versione ESPHome: [`reed_contact_esphome.mjs`](zigbee2mqtt/reed_contact_esphome.mjs)).
 4. **Abbinalo.** *Permit join* (consenti l'accesso) in Z2M. Il LED lampeggia mentre cerca la rete e si spegne una volta collegato. Muovi il magnete e guarda `contact` cambiare.
 
 <details>
@@ -135,7 +137,7 @@ Circa **15 €** di componenti, più un alimentatore da 5–24 V che spesso hai 
 |---|---|---|
 | 01 | [Hardware e collegamenti](docs/it/01-hardware-and-wiring.md) | Opzioni di alimentazione, NO o NC, schema di collegamento, tabella dei collegamenti |
 | 02 | [Costruzione passo passo](docs/it/02-build-guide.md) | Prima il test al banco, contenitore, posizionamento del reed, controlli finali |
-| 03 | [Firmware](docs/it/03-firmware.md) | PlatformIO o Arduino IDE, flash, reset di fabbrica, impostazioni |
+| 03 | [Firmware](docs/it/03-firmware.md) | PlatformIO, Arduino IDE o ESPHome, flash, reset di fabbrica, impostazioni |
 | 04 | [Zigbee2MQTT e Home Assistant](docs/it/04-zigbee2mqtt-and-home-assistant.md) | Converter, abbinamento, entità, il package per il garage |
 | 05 | [Risoluzione dei problemi](docs/it/05-troubleshooting.md) | Sintomi, cause e soluzioni |
 
@@ -151,6 +153,8 @@ Per un singolo contatto vince Zigbee: entra nella mesh che usano già i tuoi alt
 | Aggiornamenti OTA via WiFi | Aggiornamenti via USB. Capita di rado per un dispositivo che installi una volta |
 | Interfaccia web e log in rete | Log sul monitor seriale USB |
 | Rilevamento senza configurazione | Un converter Z2M di 12 righe (incluso e testato) |
+
+Ti piace ESPHome ma vuoi Zigbee? Ora ESPHome funziona anche su Zigbee: [`esphome/reed-contact.yaml`](esphome/reed-contact.yaml) è lo stesso sensore in YAML, con lo stesso cablaggio. Espone una Binary Input invece di una IAS Zone e richiede il ramo `dev` di ESPHome. Vedi l'opzione C in [Firmware](docs/it/03-firmware.md).
 
 </details>
 
@@ -191,8 +195,11 @@ firmware/
   reed_contact/reed_contact.ino   the sketch
   reed_contact/contact_logic.h    debounce + heartbeat logic (unit tested)
   test/                       host unit tests
+esphome/
+  reed-contact.yaml           lo stesso sensore come YAML ESPHome (firmware alternativo)
 zigbee2mqtt/
   reed_contact.mjs            Zigbee2MQTT external converter
+  reed_contact_esphome.mjs    converter per la versione ESPHome
   test/                       converter integration tests
 homeassistant/
   garage_door.yaml            HA package for the garage example

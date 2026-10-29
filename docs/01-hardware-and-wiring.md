@@ -26,6 +26,8 @@ No. The sensor runs on mains as a Zigbee router, which is the better setup: no b
 
 ## Wiring diagram
 
+The same wiring works for both firmware choices: the Arduino sketch and the [ESPHome YAML](03-firmware.md#option-c-esphome) use the same pins (reed on D2 / GPIO2, antenna switch on GPIO3 / GPIO14, BOOT on GPIO9, LED on GPIO15).
+
 ```
           230 V AC                                   GARAGE DOOR MOTOR
              │                                      ┌────────────────────┐

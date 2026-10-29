@@ -4,6 +4,8 @@
 
 Sketch: [`firmware/reed_contact/reed_contact.ino`](../firmware/reed_contact/reed_contact.ino)
 
+> **Two firmware choices, same hardware.** This guide covers the Arduino firmware (options A and B). If you already run your devices with ESPHome, you can flash [`esphome/reed-contact.yaml`](../esphome/reed-contact.yaml) instead: see [Option C: ESPHome](#option-c-esphome) for how it differs and how to flash it. The wiring is identical for both.
+
 ## What it does
 
 - Starts as a **Zigbee router**, so it stays always on and relays traffic for other devices.
@@ -101,3 +103,79 @@ To use the onboard ceramic antenna instead, remove the `useExternalAntenna()` ca
 ## Updating later
 
 Unplug the 12 V, connect USB, and upload **without erasing**: plain `pio run -t upload`, or in the Arduino IDE with *Erase All Flash = Disabled*. The board keeps its network keys and enrollment, and reconnects by itself without re-pairing.
+
+## Option C: ESPHome
+
+If you already manage your devices with [ESPHome](https://esphome.io/), you can flash [`esphome/reed-contact.yaml`](../esphome/reed-contact.yaml) instead of the sketch. It uses ESPHome's native Zigbee support for the ESP32-C6, so it is still a Zigbee router with no WiFi. **The wiring is exactly the same**: reed on D2 / GPIO2 to GND, external antenna through GPIO3 / GPIO14, BOOT button on GPIO9, LED on GPIO15.
+
+### Arduino firmware or ESPHome?
+
+| | Arduino firmware (options A, B) | ESPHome (option C) |
+|---|---|---|
+| Zigbee cluster | **IAS Zone** contact, the standard for door/window sensors | **Binary Input**: ESPHome has no IAS Zone support yet |
+| Zigbee2MQTT converter | [`reed_contact.mjs`](../zigbee2mqtt/reed_contact.mjs) | [`reed_contact_esphome.mjs`](../zigbee2mqtt/reed_contact_esphome.mjs) |
+| Result in Z2M and Home Assistant | `contact`, `binary_sensor` with device class *door* | the same |
+| ZHA and other coordinators | Recognised as a contact sensor | Seen as a generic binary input |
+| Model string | `C6ReedContact` | `C6ReedContactESPHome` |
+| Browser flasher and release binaries | Yes | No, you build it with ESPHome |
+| Updates | USB | USB. Over Zigbee only with the experimental OTA build (see below) |
+| ESPHome version | | `dev` branch (2026.11 or newer) |
+| Customising | Edit the C++ sketch | Edit YAML: a second reed, a relay or a temperature probe are a few lines |
+
+Pick the Arduino firmware if you want the standard contact sensor and one-click flashing. Pick ESPHome if you prefer YAML and already have an ESPHome workflow.
+
+### What the YAML does
+
+Everything the sketch does, minus the IAS Zone enrollment, which a Binary Input doesn't need:
+
+- Zigbee **router**, mains powered, manufacturer `DIY`, model `C6ReedContactESPHome`.
+- Switches to the external U.FL antenna at boot.
+- Reads the reed on **GPIO2** with the internal pull-up and a **200 ms** debounce. `presentValue` is `true` when the reed is open (magnet away or wire cut) and `false` when closed, so a failure still reads as *open*.
+- Re-sends the state **every 5 minutes** as a heartbeat.
+- **LED:** slow blink while looking for a network, off once joined.
+- **Factory reset:** hold **BOOT** for 3 s, **then release it**. The board leaves the network and reboots ready to pair. The Arduino firmware resets while you are still holding the button; ESPHome waits for the release.
+
+### Build and flash
+
+1. Install ESPHome from the `dev` branch. Native Zigbee and the `manufacturer` option are not in a stable release yet:
+
+   ```bash
+   uv tool install https://github.com/esphome/esphome/archive/dev.zip
+   ```
+
+   Or `pip install https://github.com/esphome/esphome/archive/dev.zip` in a virtualenv, or the `ghcr.io/esphome/esphome:dev` Docker image.
+2. Connect the XIAO over USB-C (with **no** 12 V on the buck). If it ran the Arduino firmware before, erase it first so no old Zigbee network data is left behind:
+
+   ```bash
+   esptool --chip esp32c6 erase-flash
+   ```
+
+3. Build and upload (the first run downloads the ESP-IDF toolchain):
+
+   ```bash
+   esphome run esphome/reed-contact.yaml
+   ```
+
+   Pick the USB serial port when asked. If the port isn't found: hold **BOOT**, tap **RESET**, release **BOOT**, then try again.
+4. Watch the logs with `esphome logs esphome/reed-contact.yaml`.
+5. Install [`zigbee2mqtt/reed_contact_esphome.mjs`](../zigbee2mqtt/reed_contact_esphome.mjs) as the Z2M converter, then pair as described in [the next guide](04-zigbee2mqtt-and-home-assistant.md).
+
+### Settings you might change
+
+| Arduino define | In the YAML |
+|---|---|
+| `REED_PIN` | `binary_sensor` → `contact` → `pin` → `number` |
+| `DEBOUNCE_MS` | `filters` → `delayed_on_off` |
+| `HEARTBEAT_MS` | the `5min` entry under `interval` |
+| `FACTORY_RESET_HOLD_MS` | `on_click` → `min_length` |
+| `useExternalAntenna()` | the `on_boot` block (remove it to use the ceramic antenna) |
+
+### Updating an ESPHome build
+
+ESPHome's usual OTA works over WiFi, which this build doesn't use. Unplug the 12 V, connect USB and run `esphome run` again **without erasing**: the board keeps its network keys and reconnects without re-pairing.
+
+Updates over Zigbee are possible with an experimental `ota: platform: zigbee` component, in review at [mmornati/esphome#1](https://github.com/mmornati/esphome/pull/1) and not part of ESPHome yet. With it, Zigbee2MQTT pushes the new firmware over the mesh. It is slow (about 30 minutes for 360 KB), so plan for it.
+
+### Switching between the two builds
+
+The model string changes, so Z2M sees a new device. Remove it in Z2M, flash the other build with a full erase, pair again and give it the same friendly name (`garage_door_sensor`). Home Assistant keeps the same entity IDs.

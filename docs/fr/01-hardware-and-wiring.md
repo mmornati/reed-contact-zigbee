@@ -26,6 +26,8 @@ Non. Le capteur fonctionne sur secteur en tant que routeur Zigbee, ce qui est la
 
 ## Schéma de câblage
 
+Le même câblage convient aux deux firmwares : le sketch Arduino et le [YAML ESPHome](03-firmware.md) (option C) utilisent les mêmes broches (reed sur D2 / GPIO2, commutateur d'antenne sur GPIO3 / GPIO14, BOOT sur GPIO9, LED sur GPIO15).
+
 ```
           230 V AC                                   GARAGE DOOR MOTOR
              │                                      ┌────────────────────┐

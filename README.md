@@ -63,7 +63,9 @@ Anywhere a magnet can move in front of a reed switch. The reed goes on the fixed
    pio run -t erase && pio run -t upload
    ```
 
-3. **Add the converter.** Copy [`zigbee2mqtt/reed_contact.mjs`](zigbee2mqtt/reed_contact.mjs) to Zigbee2MQTT's `external_converters/` folder and restart Z2M.
+   Prefer ESPHome? Flash [`esphome/reed-contact.yaml`](esphome/reed-contact.yaml) instead, same wiring. [How it differs →](docs/03-firmware.md#option-c-esphome)
+
+3. **Add the converter.** Copy [`zigbee2mqtt/reed_contact.mjs`](zigbee2mqtt/reed_contact.mjs) to Zigbee2MQTT's `external_converters/` folder and restart Z2M (for the ESPHome build: [`reed_contact_esphome.mjs`](zigbee2mqtt/reed_contact_esphome.mjs)).
 4. **Pair it.** *Permit join* in Z2M. The LED blinks while searching and turns off once joined. Move the magnet and watch `contact` flip.
 
 <details>
@@ -135,7 +137,7 @@ About **€15** of parts, plus a 5–24 V supply you often already have nearby.
 |---|---|---|
 | 01 | [Hardware & wiring](docs/01-hardware-and-wiring.md) | Power options, NO vs NC, wiring diagram, connection table |
 | 02 | [Step-by-step build](docs/02-build-guide.md) | Bench test first, enclosure, reed placement, final checks |
-| 03 | [Firmware](docs/03-firmware.md) | PlatformIO or Arduino IDE, flashing, factory reset, settings |
+| 03 | [Firmware](docs/03-firmware.md) | PlatformIO, Arduino IDE or ESPHome, flashing, factory reset, settings |
 | 04 | [Zigbee2MQTT & Home Assistant](docs/04-zigbee2mqtt-and-home-assistant.md) | Converter, pairing, entities, the garage package |
 | 05 | [Troubleshooting](docs/05-troubleshooting.md) | Symptoms, causes and fixes |
 
@@ -151,6 +153,8 @@ For a single contact, Zigbee wins: it joins the mesh your other sensors already 
 | OTA updates over WiFi | Updates over USB. Rare for a device you install once |
 | Web UI and network logs | Logs on the USB serial monitor |
 | Zero-config discovery | A 12-line Z2M converter (included and tested) |
+
+Like ESPHome but want Zigbee? ESPHome now runs on Zigbee too: [`esphome/reed-contact.yaml`](esphome/reed-contact.yaml) is the same sensor in YAML, with the same wiring. It reports a Binary Input instead of an IAS Zone and needs ESPHome's `dev` branch. See [Option C](docs/03-firmware.md#option-c-esphome).
 
 </details>
 
@@ -191,8 +195,11 @@ firmware/
   reed_contact/reed_contact.ino   the sketch
   reed_contact/contact_logic.h    debounce + heartbeat logic (unit tested)
   test/                       host unit tests
+esphome/
+  reed-contact.yaml           the same sensor as ESPHome YAML (alternative firmware)
 zigbee2mqtt/
   reed_contact.mjs            Zigbee2MQTT external converter
+  reed_contact_esphome.mjs    converter for the ESPHome build
   test/                       converter integration tests
 homeassistant/
   garage_door.yaml            HA package for the garage example
