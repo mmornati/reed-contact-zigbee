@@ -87,11 +87,12 @@ The same wiring works for both firmware choices: the Arduino sketch and the [ESP
 
 With the reed's **NO** contact, the switch closes only when the magnet is in front of it, which is when the door is fully closed. The XIAO then sees `D2 = LOW`, meaning closed. Every failure (door ajar, cable cut, connector loose, sensor dead) gives `D2 = HIGH`, meaning **not closed**, so you get an alert instead of a false "all good".
 
-Check this with a multimeter before mounting. These cheap reed switches don't always label the wires the same way:
+Most reed switches sold for alarms have **three wires** (often blue, white and black): COM, NO and NC. The diagram uses only two, COM and NO. Colours differ between brands, so check with a multimeter before mounting:
 
 1. Set the meter to continuity.
 2. Find the pair that **beeps only when the magnet is close**. Those are COM + NO.
 3. The pair that beeps when the magnet is **away** is COM + NC. Leave NC unconnected and insulated.
+4. The wire that appears in both pairs is **COM** (to `GND`); the other wire of the "magnet close" pair is **NO** (to `D2`).
 
 ### Why the 10 kΩ + 100 nF?
 
