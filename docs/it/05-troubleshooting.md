@@ -16,6 +16,7 @@
 | Abbinato, ma `contact` non cambia mai | Enrollment IAS non completato | Il log seriale mostra "Enrollment timed out": in Z2M fai *Reconfigure* del dispositivo, oppure rimuovilo, tieni premuto BOOT 3 s e riabbinalo |
 | Stato invertito (chiusa risulta aperta) | Reed collegato su **NC** | Sposta il filo su **NO** (vedi la [verifica col multimetro](01-hardware-and-wiring.md#perché-no-e-non-nc)) |
 | Lo stato sfarfalla quando il motore gira | Disturbi su un cavo del reed lungo | Aggiungi il pull-up da 10 kΩ + 100 nF; usa cavo intrecciato o schermato; fallo passare lontano dal cavo di rete del motore; aumenta `DEBOUNCE_MS` |
+| Funziona al banco, instabile in scatola, o si ferma quando tocchi un filo | Saldatura fredda o filo spezzato | Vedi la [guida alla saldatura](06-soldering.md): prova del filo mosso, rifusione con flussante, fili di campo su morsetti a vite |
 | Risulta *chiusa* con la porta aperta di qualche cm | Distanza del magnete troppo tollerante | Sposta reed/magnete in modo che si allineino solo nell'ultimo centimetro, o riduci la distanza |
 | Il sensore si scollega quando il tastierino apre la porta | Alimentato dall'uscita **serratura** dello YAVIS | Passa ai morsetti **costanti** `+12V`/`GND` |
 | Lo XIAO si resetta o scalda | Uscita del buck sbagliata | Misura: deve essere 5,0–5,1 V; risigilla il trimmer |

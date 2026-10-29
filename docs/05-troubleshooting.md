@@ -16,6 +16,7 @@
 | Paired, but `contact` never changes | IAS enrollment didn't complete | Serial log shows "Enrollment timed out": in Z2M, *Reconfigure* the device, or remove it, hold BOOT 3 s and pair again |
 | State inverted (closed shows open) | Reed wired on **NC** | Move the wire to **NO** (see the [multimeter check](01-hardware-and-wiring.md#why-no-and-not-nc)) |
 | State flickers when the motor runs | Noise on a long reed cable | Add the 10 kΩ pull-up + 100 nF; use twisted or shielded cable; route it away from the motor's mains cable; raise `DEBOUNCE_MS` |
+| Works on the bench, flaky once boxed, or stops when a wire is touched | Cold solder joint or broken strand | See the [soldering guide](06-soldering.md): wiggle test, reflow with flux, field wires into screw terminals |
 | Shows *closed* while the door is a few cm open | Magnet gap too forgiving | Move the reed/magnet so they only line up at the last centimetre, or reduce the gap |
 | Sensor drops off when the keypad opens the door | Powered from the YAVIS **lock** output | Move to the **constant** `+12V`/`GND` terminals |
 | XIAO resets or gets hot | Buck output wrong | Measure: it must be 5.0–5.1 V; re-seal the trimmer |
