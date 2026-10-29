@@ -87,11 +87,12 @@ Lo stesso cablaggio va bene per entrambi i firmware: lo sketch Arduino e lo [YAM
 
 Con il contatto **NO** del reed, l'interruttore si chiude solo quando il magnete gli sta davanti, cioè quando la porta è completamente chiusa. Lo XIAO legge allora `D2 = LOW`, cioè chiuso. Qualsiasi guasto (porta socchiusa, cavo tagliato, connettore allentato, sensore rotto) dà `D2 = HIGH`, cioè **non chiuso**, così ricevi un avviso invece di un falso "tutto ok".
 
-Verificalo con un multimetro prima del montaggio. Questi reed economici non sempre etichettano i fili allo stesso modo:
+La maggior parte dei reed venduti per gli allarmi ha **tre fili** (spesso blu, bianco e nero): COM, NO e NC. Lo schema ne usa solo due, COM e NO. I colori cambiano da marca a marca, quindi verifica con un multimetro prima del montaggio:
 
 1. Metti il multimetro in prova di continuità.
 2. Trova la coppia che **suona solo quando il magnete è vicino**. Quelli sono COM + NO.
 3. La coppia che suona quando il magnete è **lontano** è COM + NC. Lascia NC scollegato e isolato.
+4. Il filo presente in entrambe le coppie è **COM** (verso `GND`); l'altro filo della coppia "magnete vicino" è **NO** (verso `D2`).
 
 ### Perché 10 kΩ + 100 nF?
 

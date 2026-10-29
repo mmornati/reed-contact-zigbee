@@ -87,11 +87,12 @@ Le même câblage convient aux deux firmwares : le sketch Arduino et le [YAML ES
 
 Avec le contact **NO** (normalement ouvert) du reed, l'interrupteur ne se ferme que lorsque l'aimant est en face, c'est-à-dire quand la porte est complètement fermée. Le XIAO voit alors `D2 = LOW`, ce qui signifie fermé. Toute défaillance (porte entrouverte, câble coupé, connecteur desserré, capteur mort) donne `D2 = HIGH`, soit **pas fermé** : vous recevez une alerte au lieu d'un faux « tout va bien ».
 
-Vérifiez-le au multimètre avant le montage. Ces reeds bon marché n'identifient pas toujours les fils de la même façon :
+La plupart des reeds vendus pour les alarmes ont **trois fils** (souvent bleu, blanc et noir) : COM, NO et NC. Le schéma n'en utilise que deux, COM et NO. Les couleurs changent selon les marques, donc vérifiez au multimètre avant le montage :
 
 1. Mettez le multimètre en mode continuité.
 2. Trouvez la paire qui **bipe uniquement quand l'aimant est proche**. Ce sont COM + NO.
 3. La paire qui bipe quand l'aimant est **éloigné** est COM + NC. Laissez NC non connecté et isolé.
+4. Le fil présent dans les deux paires est **COM** (vers `GND`) ; l'autre fil de la paire « aimant proche » est **NO** (vers `D2`).
 
 ### Pourquoi 10 kΩ + 100 nF ?
 
