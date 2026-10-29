@@ -10,6 +10,9 @@
 | Errore di compilazione su `requestIASZoneEnroll` / `restoreIASZoneEnroll` | Core ESP32 vecchio | Aggiorna **esp32 by Espressif** alla 3.3.0 o successiva |
 | Il LED lampeggia lentamente all'infinito | Non si collega alla rete | Attiva *Permit join* in Z2M; avvicinati a un router; tieni premuto BOOT 3 s per il reset di fabbrica; riflasha con *Erase All Flash = Enabled* |
 | Z2M mostra *Unsupported* / *DIY C6ReedContact not supported* | Converter non caricato | Il file deve stare in `external_converters/` con estensione `.mjs`; riavvia Z2M; controlla gli errori nel log |
+| ESPHome: *'manufacturer' is an invalid option* o nessun componente `zigbee` | Versione stabile di ESPHome | Installa ESPHome dal ramo `dev` (vedi l'opzione C in [Firmware](03-firmware.md)) |
+| Versione ESPHome: Z2M mostra *DIY C6ReedContactESPHome not supported* | Converter sbagliato | Usa `reed_contact_esphome.mjs`; il converter Arduino riconosce solo `C6ReedContact` |
+| Versione ESPHome: abbinato, ma `contact` resta vuoto | Binding o prima lettura persi durante l'interview | In Z2M fai *Reconfigure* sul dispositivo, o muovi il magnete una volta; anche l'heartbeat di 5 min lo riempie |
 | Abbinato, ma `contact` non cambia mai | Enrollment IAS non completato | Il log seriale mostra "Enrollment timed out": in Z2M fai *Reconfigure* del dispositivo, oppure rimuovilo, tieni premuto BOOT 3 s e riabbinalo |
 | Stato invertito (chiusa risulta aperta) | Reed collegato su **NC** | Sposta il filo su **NO** (vedi la [verifica col multimetro](01-hardware-and-wiring.md#perché-no-e-non-nc)) |
 | Lo stato sfarfalla quando il motore gira | Disturbi su un cavo del reed lungo | Aggiungi il pull-up da 10 kΩ + 100 nF; usa cavo intrecciato o schermato; fallo passare lontano dal cavo di rete del motore; aumenta `DEBOUNCE_MS` |

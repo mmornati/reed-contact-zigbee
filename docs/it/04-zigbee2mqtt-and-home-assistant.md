@@ -12,11 +12,13 @@ Z2M non conosce un dispositivo fai-da-te, quindi un piccolo converter gli dice "
 2. Riavvia Zigbee2MQTT. In Z2M 2.x tutto ciò che sta in `external_converters/` viene caricato automaticamente, senza modificare `configuration.yaml`.
 3. Controlla nel log di Z2M che ci sia una riga che dice che l'external converter `reed_contact.mjs` è stato caricato.
 
+> **Versione ESPHome?** Usa invece [`zigbee2mqtt/reed_contact_esphome.mjs`](../../zigbee2mqtt/reed_contact_esphome.mjs), allo stesso modo. ESPHome espone il reed come Binary Input e non come IAS Zone, con il modello `C6ReedContactESPHome`, quindi i due converter possono convivere in `external_converters/`.
+
 ## 4.2 Abbina il sensore
 
 1. Nell'interfaccia di Z2M, clicca **Permit join (All)** (consenti l'accesso a tutti). Scegliere il coordinatore o un router vicino al garage aiuta.
 2. Alimenta lo XIAO (USB al banco, o 12 V una volta installato). Il LED lampeggia lentamente, poi si spegne una volta collegato.
-3. Z2M lo interroga (interview) e dovrebbe mostrare **DIY C6ReedContact, "Mains-powered reed contact sensor and Zigbee router (XIAO ESP32-C6)"**, tipo **Router**.
+3. Z2M lo interroga (interview) e dovrebbe mostrare **DIY C6ReedContact, "Mains-powered reed contact sensor and Zigbee router (XIAO ESP32-C6)"**, tipo **Router**. La versione ESPHome compare come **DIY C6ReedContactESPHome**.
 4. Rinominalo in **`garage_door_sensor`** e spunta *Update Home Assistant entity ID*.
 5. Controlla la scheda *Exposes*: `contact` deve essere **true** con il magnete davanti e **false** senza.
 

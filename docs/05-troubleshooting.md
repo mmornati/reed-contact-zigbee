@@ -10,6 +10,9 @@
 | Compile error on `requestIASZoneEnroll` / `restoreIASZoneEnroll` | Old ESP32 core | Update **esp32 by Espressif** to 3.3.0 or newer |
 | LED blinks slowly forever | Not joining | Turn on *Permit join* in Z2M; move closer to a router; hold BOOT 3 s to factory reset; reflash with *Erase All Flash = Enabled* |
 | Z2M shows *Unsupported* / *DIY C6ReedContact not supported* | Converter not loaded | File must be in `external_converters/` with a `.mjs` extension; restart Z2M; check the log for errors |
+| ESPHome: *'manufacturer' is an invalid option* or no `zigbee` component | Stable ESPHome release | Install ESPHome from the `dev` branch (see [Option C](03-firmware.md#option-c-esphome)) |
+| ESPHome build: Z2M shows *DIY C6ReedContactESPHome not supported* | Wrong converter | Use `reed_contact_esphome.mjs`; the Arduino converter only matches `C6ReedContact` |
+| ESPHome build: paired, but `contact` stays empty | Binding or first read missed during the interview | In Z2M, *Reconfigure* the device, or move the magnet once; the 5 min heartbeat also fills it in |
 | Paired, but `contact` never changes | IAS enrollment didn't complete | Serial log shows "Enrollment timed out": in Z2M, *Reconfigure* the device, or remove it, hold BOOT 3 s and pair again |
 | State inverted (closed shows open) | Reed wired on **NC** | Move the wire to **NO** (see the [multimeter check](01-hardware-and-wiring.md#why-no-and-not-nc)) |
 | State flickers when the motor runs | Noise on a long reed cable | Add the 10 kΩ pull-up + 100 nF; use twisted or shielded cable; route it away from the motor's mains cable; raise `DEBOUNCE_MS` |

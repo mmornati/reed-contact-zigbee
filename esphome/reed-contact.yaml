@@ -1,0 +1,99 @@
+# Reed contact sensor, ESPHome build: Seeed XIAO ESP32-C6, mains powered, Zigbee router.
+# Same wiring as the Arduino firmware (see docs/01-hardware-and-wiring.md):
+#   reed COM -> GND, reed NO -> D2 (GPIO2), external antenna on U.FL.
+#
+# Differences from the Arduino firmware:
+#   - The contact is a Zigbee Binary Input, not an IAS Zone (ESPHome has no IAS Zone yet).
+#     Use zigbee2mqtt/reed_contact_esphome.mjs, not reed_contact.mjs.
+#   - The model is C6ReedContactESPHome, so both builds can live in the same Zigbee2MQTT.
+#
+# Needs ESPHome with native Zigbee for ESP32 and the `manufacturer` option (dev branch,
+# 2026.11 or newer). Updates go over USB, or over Zigbee with the OTA fork (see docs/03-firmware.md).
+esphome:
+  name: reed-contact
+  friendly_name: Reed contact
+  on_boot:
+    # Switch the radio to the external U.FL antenna (GPIO3 = LOW, GPIO14 = HIGH).
+    # Remove these three lines to use the onboard ceramic antenna.
+    - priority: 800
+      then:
+        - output.turn_off: rf_switch_en
+        - delay: 100ms
+        - output.turn_on: rf_ant_select
+
+esp32:
+  board: seeed_xiao_esp32c6
+  framework:
+    type: esp-idf
+
+logger:
+
+zigbee:
+  id: zb
+  router: true
+  power_source: MAINS_SINGLE_PHASE
+  manufacturer: DIY
+  model: C6ReedContactESPHome
+
+output:
+  - platform: gpio
+    id: rf_switch_en
+    pin: GPIO3
+  - platform: gpio
+    id: rf_ant_select
+    pin: GPIO14
+  # User LED, active LOW: slow blink while looking for a network, off once joined.
+  - platform: gpio
+    id: status_led
+    pin:
+      number: GPIO15
+      inverted: true
+
+binary_sensor:
+  # Reed to GND: magnet in front = LOW = closed (OFF). HIGH (open or cut wire) = ON = open.
+  # Zigbee Binary Input presentValue: true = open, false = closed.
+  - platform: gpio
+    id: contact
+    name: Contact
+    device_class: garage_door
+    pin:
+      number: GPIO2
+      mode:
+        input: true
+        pullup: true  # an external 10k pull-up is still recommended
+    filters:
+      - delayed_on_off: 200ms  # reed must be stable this long
+    endpoint: 1
+    report: force
+
+  # BOOT button: hold 3 s, then release, to leave the network and pair again.
+  - platform: gpio
+    id: boot_button
+    internal: true
+    pin:
+      number: GPIO9
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    on_click:
+      min_length: 3s
+      max_length: 30s
+      then:
+        - zigbee.factory_reset
+
+interval:
+  # Heartbeat: re-send the state every 5 minutes
+  - interval: 5min
+    then:
+      - zigbee.report
+  - interval: 500ms
+    then:
+      - lambda: |-
+          if (id(zb).is_joined()) {
+            id(status_led).turn_off();
+          } else {
+            static bool led_on = false;
+            led_on = !led_on;
+            if (led_on) id(status_led).turn_on(); else id(status_led).turn_off();
+          }
