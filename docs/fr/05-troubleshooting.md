@@ -16,6 +16,7 @@
 | Appairé, mais `contact` ne change jamais | L'enrôlement IAS n'a pas abouti | Le log série affiche "Enrollment timed out" : dans Z2M, faites *Reconfigure* sur l'appareil, ou supprimez-le, maintenez BOOT 3 s et appairez de nouveau |
 | État inversé (fermé affiché ouvert) | Reed câblé sur **NC** | Déplacez le fil sur **NO** (voir la [vérification au multimètre](01-hardware-and-wiring.md#pourquoi-no-et-pas-nc-)) |
 | L'état clignote quand le moteur tourne | Bruit sur un long câble de reed | Ajoutez le pull-up 10 kΩ + 100 nF ; utilisez un câble torsadé ou blindé ; éloignez-le du câble secteur du moteur ; augmentez `DEBOUNCE_MS` |
+| Marche sur l'établi, instable une fois en boîtier, ou s'arrête quand on touche un fil | Soudure froide ou brin cassé | Voir le [guide de soudure](06-soldering.md) : test du fil bougé, reprise au flux, fils de terrain sur borniers à vis |
 | Affiche *fermé* alors que la porte est ouverte de quelques cm | Écart de l'aimant trop tolérant | Déplacez le reed/l'aimant pour qu'ils ne s'alignent qu'au dernier centimètre, ou réduisez l'écart |
 | Le capteur décroche quand le clavier ouvre la porte | Alimenté par la sortie **gâche** de la YAVIS | Passez sur les bornes **permanentes** `+12V`/`GND` |
 | Le XIAO redémarre ou chauffe | Mauvaise tension en sortie de l'abaisseur | Mesurez : elle doit être de 5,0–5,1 V ; rebloquez le potentiomètre |

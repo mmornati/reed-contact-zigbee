@@ -30,7 +30,7 @@ Vous avez maintenant un capteur fonctionnel avant d'avoir soudé quoi que ce soi
 
 ## Étape 4 : câbler le boîtier
 
-Suivez le [schéma de câblage](01-hardware-and-wiring.md#schéma-de-câblage).
+Suivez le [schéma de câblage](01-hardware-and-wiring.md#schéma-de-câblage). Peu habitué à souder, ou des soudures qui ne tiennent pas ? Lisez d'abord le [guide de soudure](06-soldering.md) : il place le XIAO sur une plaque à pastilles avec des borniers à vis, bien plus fiable que des fils soudés directement sur ses pastilles.
 
 1. Soudez la résistance de 10 kΩ entre `D2` et `3V3`, et le condensateur de 100 nF entre `D2` et `GND`, sur les broches du XIAO (ou sur un petit morceau de plaque à trous).
 2. Abaisseur `OUT+` → XIAO `5V`, abaisseur `OUT−` → XIAO `GND`. Soudez-les, ne comptez pas sur des cavaliers Dupont lâches dans un garage.

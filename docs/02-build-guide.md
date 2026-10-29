@@ -30,7 +30,7 @@ You now have a working sensor before soldering anything permanent.
 
 ## Step 4: Wire the box
 
-Follow the [wiring diagram](01-hardware-and-wiring.md#wiring-diagram).
+Follow the [wiring diagram](01-hardware-and-wiring.md#wiring-diagram). New to soldering, or joints that don't hold? Read the [soldering guide](06-soldering.md) first: it puts the XIAO on a perfboard with screw terminals, which is much more reliable than wires soldered straight onto its pads.
 
 1. Solder the 10 kΩ resistor between `D2` and `3V3`, and the 100 nF capacitor between `D2` and `GND`, on the XIAO pins (or on a small piece of perfboard).
 2. Buck `OUT+` → XIAO `5V`, buck `OUT−` → XIAO `GND`. Solder these, don't rely on loose Dupont jumpers in a garage.

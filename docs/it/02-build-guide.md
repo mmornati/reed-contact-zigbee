@@ -30,7 +30,7 @@ Ora hai un sensore funzionante prima di saldare qualsiasi cosa in modo definitiv
 
 ## Passo 4: cabla la scatola
 
-Segui lo [schema di collegamento](01-hardware-and-wiring.md#schema-di-collegamento).
+Segui lo [schema di collegamento](01-hardware-and-wiring.md#schema-di-collegamento). Poca pratica con le saldature, o saldature che non tengono? Leggi prima la [guida alla saldatura](06-soldering.md): monta lo XIAO su una millefori con morsetti a vite, molto più affidabile dei fili saldati direttamente sui suoi pad.
 
 1. Salda la resistenza da 10 kΩ tra `D2` e `3V3`, e il condensatore da 100 nF tra `D2` e `GND`, sui pin dello XIAO (o su un pezzetto di millefori).
 2. `OUT+` del buck → `5V` dello XIAO, `OUT−` del buck → `GND` dello XIAO. Saldali, non fidarti di jumper Dupont volanti in un garage.

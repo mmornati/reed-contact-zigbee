@@ -140,6 +140,7 @@ Environ **15 €** de composants, plus une alimentation 5–24 V que vous avez s
 | 03 | [Firmware](docs/fr/03-firmware.md) | PlatformIO, Arduino IDE ou ESPHome, flashage, réinitialisation d'usine, paramètres |
 | 04 | [Zigbee2MQTT & Home Assistant](docs/fr/04-zigbee2mqtt-and-home-assistant.md) | Convertisseur, appairage, entités, le package garage |
 | 05 | [Dépannage](docs/fr/05-troubleshooting.md) | Symptômes, causes et solutions |
+| 06 | [Souder le XIAO](docs/fr/06-soldering.md) | Outils, températures, montage sur plaque, vérifications avant mise sous tension, soudures ratées |
 
 ## 🤔 FAQ
 
