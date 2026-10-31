@@ -79,7 +79,7 @@ Lo stesso cablaggio va bene per entrambi i firmware: lo sketch Arduino e lo [YAM
 | Reed `COM` | XIAO `GND` | conduttore 1 del cavo |
 | Reed `NO` | XIAO `D2` (GPIO2) | conduttore 2 del cavo |
 | Resistenza da 10 kΩ | tra XIAO `D2` e `3V3` | lato XIAO |
-| Condensatore da 100 nF | tra XIAO `D2` e `GND` | lato XIAO |
+| Condensatore da 100 nF | tra XIAO `D2` e `GND` (ceramico: verso indifferente; elettrolitico: reoforo lungo + su `D2`, striscia − su `GND`) | lato XIAO |
 | ZB-SW01 `COM` + `NO` | morsetti pulsante del motore | come da manuale del motore |
 | Antenna U.FL | connettore antenna dello XIAO | |
 

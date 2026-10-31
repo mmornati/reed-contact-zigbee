@@ -81,6 +81,7 @@ Débranchez l'USB et le 12 V avant de commencer. Ne soudez jamais une carte alim
 
 1. Soudez des barrettes femelles sur la plaque pour le XIAO (il reste amovible pour le reflasher), ou soudez directement ses barrettes.
 2. Placez la **10 kΩ** entre la rangée `D2` et la rangée `3V3`, et le **100 nF** entre la rangée `D2` et une rangée `GND`. Pliez les pattes à plat au dos et servez-vous-en comme pistes.
+   > **Dans quel sens mettre le condensateur ?** Le 100 nF est normalement un petit condensateur **céramique** (goutte jaune ou bleue, marquée `104`). Il n'a pas de polarité : n'importe quelle patte peut aller sur `D2`. Si le vôtre est un petit **cylindre** avec une bande sur le côté, c'est un **électrolytique**, et il est polarisé : la **patte longue (+) va sur `D2`**, la patte courte, du côté de la bande (−), va sur `GND`. Vérifiez aussi sa valeur : au-delà d'environ 10 µF l'entrée devient lente à réagir, remplacez-le alors par un céramique de 100 nF.
 3. Placez les deux borniers et reliez-les à `D2`/`GND` et `5V`/`GND` avec les pattes des composants ou de courts bouts de fil rigide.
 4. Gardez au moins un trou entre les pistes `5V` et `GND`. Coupez les pattes en trop pour qu'elles ne puissent pas se toucher plus tard.
 

@@ -79,7 +79,7 @@ The same wiring works for both firmware choices: the Arduino sketch and the [ESP
 | Reed `COM` | XIAO `GND` | cable core 1 |
 | Reed `NO` | XIAO `D2` (GPIO2) | cable core 2 |
 | 10 kΩ resistor | between XIAO `D2` and `3V3` | on the XIAO side |
-| 100 nF capacitor | between XIAO `D2` and `GND` | on the XIAO side |
+| 100 nF capacitor | between XIAO `D2` and `GND` (ceramic: either way round; electrolytic: long leg + to `D2`, stripe − to `GND`) | on the XIAO side |
 | ZB-SW01 `COM` + `NO` | motor push-button terminals | as in the motor manual |
 | U.FL antenna | XIAO antenna connector | |
 

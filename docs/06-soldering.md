@@ -81,6 +81,7 @@ Unplug USB and 12 V before you start. Never solder a powered board.
 
 1. Solder female headers on the perfboard for the XIAO (so it stays removable for reflashing), or solder the XIAO's headers straight in.
 2. Fit the **10 kΩ** between the `D2` row and the `3V3` row, and the **100 nF** between the `D2` row and a `GND` row. Bend the legs flat on the back and use them as tracks.
+   > **Which way round does the capacitor go?** The 100 nF is normally a small **ceramic** capacitor (yellow or blue drop, marked `104`). It has no polarity: either leg can go to `D2`. If yours is a small **cylinder** with a stripe on the side, it is an **electrolytic** and it is polarised: the **long leg (+) goes to `D2`**, and the short leg, on the stripe side (−), goes to `GND`. Check its value too: anything above about 10 µF makes the input slow to react, so swap it for a 100 nF ceramic.
 3. Fit the two screw terminals and join them to `D2`/`GND` and `5V`/`GND` with the component legs or short pieces of solid wire.
 4. Keep `5V` and `GND` tracks at least one hole apart. Cut off leftover legs so they can't touch later.
 
