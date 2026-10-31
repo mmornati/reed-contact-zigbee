@@ -79,7 +79,7 @@ Le même câblage convient aux deux firmwares : le sketch Arduino et le [YAML ES
 | Reed `COM` | XIAO `GND` | conducteur 1 du câble |
 | Reed `NO` | XIAO `D2` (GPIO2) | conducteur 2 du câble |
 | Résistance 10 kΩ | entre XIAO `D2` et `3V3` | côté XIAO |
-| Condensateur 100 nF | entre XIAO `D2` et `GND` | côté XIAO |
+| Condensateur 100 nF | entre XIAO `D2` et `GND` (céramique : sens indifférent ; électrolytique : patte longue + sur `D2`, bande − sur `GND`) | côté XIAO |
 | ZB-SW01 `COM` + `NO` | bornes bouton-poussoir du moteur | selon la notice du moteur |
 | Antenne U.FL | connecteur d'antenne du XIAO | |
 

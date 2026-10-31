@@ -81,6 +81,7 @@ Scollega USB e 12 V prima di iniziare. Non saldare mai una scheda alimentata.
 
 1. Salda degli header femmina sulla millefori per lo XIAO (così resta estraibile per riflasharlo), oppure salda direttamente i suoi header.
 2. Monta la **10 kΩ** tra la fila `D2` e la fila `3V3`, e il **100 nF** tra la fila `D2` e una fila `GND`. Piega i reofori in piano sul retro e usali come piste.
+   > **In che verso va il condensatore?** Il 100 nF di solito è un piccolo condensatore **ceramico** (goccia gialla o blu, con la scritta `104`). Non ha polarità: qualsiasi reoforo può andare su `D2`. Se il tuo è un piccolo **cilindro** con una striscia sul lato, è un **elettrolitico** ed è polarizzato: il **reoforo lungo (+) va su `D2`**, quello corto, dal lato della striscia (−), va su `GND`. Controlla anche il valore: oltre circa 10 µF l'ingresso diventa lento a reagire, quindi sostituiscilo con un ceramico da 100 nF.
 3. Monta i due morsetti e collegali a `D2`/`GND` e `5V`/`GND` con i reofori dei componenti o con spezzoni di filo rigido.
 4. Lascia almeno un foro tra le piste `5V` e `GND`. Taglia i reofori in eccesso perché non possano toccarsi in seguito.
 
