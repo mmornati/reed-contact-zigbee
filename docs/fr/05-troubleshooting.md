@@ -13,7 +13,8 @@
 | ESPHome : *'manufacturer' is an invalid option* ou pas de composant `zigbee` | Version stable d'ESPHome | Installez ESPHome depuis la branche `dev` (voir l'option C dans [Firmware](03-firmware.md)) |
 | Version ESPHome : Z2M affiche *DIY C6ReedContactESPHome not supported* | Mauvais convertisseur | Utilisez `reed_contact_esphome.mjs` ; le convertisseur Arduino ne reconnaît que `C6ReedContact` |
 | Version ESPHome : appairé, mais `contact` reste vide | Liaison ou première lecture manquée pendant l'interview | Dans Z2M, faites *Reconfigure* sur l'appareil, ou bougez l'aimant une fois ; le heartbeat de 5 min le remplit aussi |
-| Appairé, mais `contact` ne change jamais | L'enrôlement IAS n'a pas abouti | Le log série affiche "Enrollment timed out" : dans Z2M, faites *Reconfigure* sur l'appareil, ou supprimez-le, maintenez BOOT 3 s et appairez de nouveau |
+| Appairé, mais `contact` ne change jamais | L'enrôlement IAS n'a pas abouti : Z2M n'a jamais écrit son adresse dans l'appareil | Le log série boucle sur "Enrollment timed out" / "IAS Zone not enrolled" : dans Z2M, ouvrez l'appareil et cliquez sur *Interview* (*Reconfigure* n'aide pas, il répond "cannot be configured"), ou supprimez-le, maintenez BOOT 3 s et appairez de nouveau |
+| Carte flashée avec effacement alors que Z2M la connaissait déjà, et `contact` ne change plus | Elle revient avec la même adresse : Z2M note un simple retour et saute l'interview dont l'enrôlement a besoin | Une fois qu'elle a rejoint le réseau, cliquez sur *Interview* dans Z2M. La prochaine fois, supprimez l'appareil de Z2M avant de flasher avec effacement, ou flashez sans effacer |
 | État inversé (fermé affiché ouvert) | Reed câblé sur **NC** | Déplacez le fil sur **NO** (voir la [vérification au multimètre](01-hardware-and-wiring.md#pourquoi-no-et-pas-nc-)) |
 | L'état clignote quand le moteur tourne | Bruit sur un long câble de reed | Ajoutez le pull-up 10 kΩ + 100 nF ; utilisez un câble torsadé ou blindé ; éloignez-le du câble secteur du moteur ; augmentez `DEBOUNCE_MS` |
 | Marche sur l'établi, instable une fois en boîtier, ou s'arrête quand on touche un fil | Soudure froide ou brin cassé | Voir le [guide de soudure](06-soldering.md) : test du fil bougé, reprise au flux, fils de terrain sur borniers à vis |
@@ -33,3 +34,5 @@ Restoring IAS Zone enrollment      (after a reboot)
 Enrolled
 Contact CLOSED / Contact OPEN
 ```
+
+Ouvrir le port série redémarre le XIAO : à chaque lancement du moniteur, vous revoyez le log de démarrage.
