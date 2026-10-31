@@ -13,7 +13,8 @@
 | ESPHome: *'manufacturer' is an invalid option* o nessun componente `zigbee` | Versione stabile di ESPHome | Installa ESPHome dal ramo `dev` (vedi l'opzione C in [Firmware](03-firmware.md)) |
 | Versione ESPHome: Z2M mostra *DIY C6ReedContactESPHome not supported* | Converter sbagliato | Usa `reed_contact_esphome.mjs`; il converter Arduino riconosce solo `C6ReedContact` |
 | Versione ESPHome: abbinato, ma `contact` resta vuoto | Binding o prima lettura persi durante l'interview | In Z2M fai *Reconfigure* sul dispositivo, o muovi il magnete una volta; anche l'heartbeat di 5 min lo riempie |
-| Abbinato, ma `contact` non cambia mai | Enrollment IAS non completato | Il log seriale mostra "Enrollment timed out": in Z2M fai *Reconfigure* del dispositivo, oppure rimuovilo, tieni premuto BOOT 3 s e riabbinalo |
+| Abbinato, ma `contact` non cambia mai | Enrollment IAS non completato: Z2M non ha mai scritto il suo indirizzo nel dispositivo | Il log seriale ripete "Enrollment timed out" / "IAS Zone not enrolled": in Z2M apri il dispositivo e clicca *Interview* (*Reconfigure* non serve, risponde "cannot be configured"), oppure rimuovilo, tieni premuto BOOT 3 s e riabbinalo |
+| Scheda flashata con cancellazione quando Z2M la conosceva già, e `contact` non cambia più | Rientra con lo stesso indirizzo: Z2M registra solo un rientro e salta l'interview che serve all'enrollment | Quando è rientrata in rete, clicca *Interview* sul dispositivo in Z2M. La prossima volta rimuovi il dispositivo da Z2M prima di flashare con cancellazione, oppure flasha senza cancellare |
 | Stato invertito (chiusa risulta aperta) | Reed collegato su **NC** | Sposta il filo su **NO** (vedi la [verifica col multimetro](01-hardware-and-wiring.md#perché-no-e-non-nc)) |
 | Lo stato sfarfalla quando il motore gira | Disturbi su un cavo del reed lungo | Aggiungi il pull-up da 10 kΩ + 100 nF; usa cavo intrecciato o schermato; fallo passare lontano dal cavo di rete del motore; aumenta `DEBOUNCE_MS` |
 | Funziona al banco, instabile in scatola, o si ferma quando tocchi un filo | Saldatura fredda o filo spezzato | Vedi la [guida alla saldatura](06-soldering.md): prova del filo mosso, rifusione con flussante, fili di campo su morsetti a vite |
@@ -33,3 +34,5 @@ Restoring IAS Zone enrollment      (after a reboot)
 Enrolled
 Contact CLOSED / Contact OPEN
 ```
+
+Aprire la porta seriale riavvia lo XIAO, quindi a ogni avvio del monitor rivedi il log di boot.

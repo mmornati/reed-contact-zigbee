@@ -13,7 +13,8 @@
 | ESPHome: *'manufacturer' is an invalid option* or no `zigbee` component | Stable ESPHome release | Install ESPHome from the `dev` branch (see [Option C](03-firmware.md#option-c-esphome)) |
 | ESPHome build: Z2M shows *DIY C6ReedContactESPHome not supported* | Wrong converter | Use `reed_contact_esphome.mjs`; the Arduino converter only matches `C6ReedContact` |
 | ESPHome build: paired, but `contact` stays empty | Binding or first read missed during the interview | In Z2M, *Reconfigure* the device, or move the magnet once; the 5 min heartbeat also fills it in |
-| Paired, but `contact` never changes | IAS enrollment didn't complete | Serial log shows "Enrollment timed out": in Z2M, *Reconfigure* the device, or remove it, hold BOOT 3 s and pair again |
+| Paired, but `contact` never changes | IAS enrollment didn't complete: Z2M never wrote its address to the device | Serial log loops on "Enrollment timed out" / "IAS Zone not enrolled": in Z2M, open the device and click *Interview* (*Reconfigure* won't help, it answers "cannot be configured"), or remove it, hold BOOT 3 s and pair again |
+| Erase-flashed a board Z2M already knew, now `contact` never changes | It rejoins with the same address, so Z2M only logs a rejoin and skips the interview that enrollment needs | Click *Interview* on the device in Z2M once it has rejoined. Next time, remove the device from Z2M before an erase-flash, or flash without erasing |
 | State inverted (closed shows open) | Reed wired on **NC** | Move the wire to **NO** (see the [multimeter check](01-hardware-and-wiring.md#why-no-and-not-nc)) |
 | State flickers when the motor runs | Noise on a long reed cable | Add the 10 kΩ pull-up + 100 nF; use twisted or shielded cable; route it away from the motor's mains cable; raise `DEBOUNCE_MS` |
 | Works on the bench, flaky once boxed, or stops when a wire is touched | Cold solder joint or broken strand | See the [soldering guide](06-soldering.md): wiggle test, reflow with flux, field wires into screw terminals |
@@ -33,3 +34,5 @@ Restoring IAS Zone enrollment      (after a reboot)
 Enrolled
 Contact CLOSED / Contact OPEN
 ```
+
+Opening the serial port reboots the XIAO, so each time you start the monitor you see the boot log again.
